@@ -8,7 +8,7 @@ type IProps = {
 };
 export function Layout({ children }: IProps) {
   return (
-    <div className=" container flex flex-col h-screen w-screen">
+    <div className="container flex flex-col w-screen">
       <Header />
       {children}
     </div>

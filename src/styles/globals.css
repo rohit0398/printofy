@@ -1,3 +1,5 @@
+@import "scrollbar.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,4 +26,29 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+/* In your CSS file or component */
+.custom-white-text-shadow {
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+}
+.custom-purple-text-shadow {
+  text-shadow: 2px 2px 4px rgba(213, 0, 249, 0.8);
+}
+
+@layer components {
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-app-purple via-white to-app-dark-purple;
+  }
+  .border-gradient {
+    @apply p-px bg-gradient-to-r from-cyan via-blue to-pink;
+  }
+
+  .background-gradient {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 240, 255, 0.21) 0%,
+      rgba(255, 0, 122, 0) 100%
+    );
+  }
 }
