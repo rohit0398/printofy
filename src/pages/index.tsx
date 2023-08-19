@@ -7,6 +7,7 @@ import { Button } from "@/atoms/button";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  //build
   return (
     <Layout>
       <div className="">
