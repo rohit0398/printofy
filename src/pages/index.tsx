@@ -26,7 +26,7 @@ export default function Home() {
           >
             <img
               src="assests/shroom-logo.png"
-              className=" w-fit object-cover animate-bounce transition duration-500"
+              className=" w-fit object-cover transition duration-500"
             />
           </div>
           <div className=" flex flex-col gap-5 justify-end text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full">
