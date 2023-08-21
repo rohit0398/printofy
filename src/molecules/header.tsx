@@ -112,14 +112,14 @@ export function Header() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-black py-1 shadow-lg ring-1 ring-white/30 ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
                             className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              active ? "bg-app-purple" : "",
+                              "block px-4 py-2 text-sm text-white"
                             )}
                           >
                             Your Profile
@@ -131,8 +131,8 @@ export function Header() {
                           <a
                             href="#"
                             className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              active ? "bg-app-purple" : "",
+                              "block px-4 py-2 text-sm text-white"
                             )}
                           >
                             Settings
@@ -144,8 +144,8 @@ export function Header() {
                           <a
                             href="#"
                             className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              active ? "bg-app-purple" : "",
+                              "block px-4 py-2 text-sm text-white"
                             )}
                           >
                             Sign out
@@ -159,7 +159,7 @@ export function Header() {
             </div>
           </div>
 
-          <Disclosure.Panel className="sm:hidden bg-black/70 absolute top-14 left-0 right-0 z-50">
+          <Disclosure.Panel className="sm:hidden bg-black absolute top-14 left-0 right-0 z-50">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
                 <Disclosure.Button

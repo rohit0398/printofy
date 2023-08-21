@@ -33,11 +33,11 @@ export function Button({
           disabled ? 'opacity-40 cursor-not-allowed' : ''
         }`;
       case 'out-lined':
-        return `bg-transparent text-app-purple text-center ${rounded} border border-app-purple hover:border-black/60 transition duration-500 ${className} ${size} ${paddingMargin} ${fontSize} ${
+        return `bg-transparent text-white text-center ${rounded} border border-app-purple hover:ring ring-white  transition duration-500 ${className} ${size} ${paddingMargin} ${fontSize} ${
           disabled ? 'opacity-40 cursor-not-allowed' : ''
         }`;
       default:
-        return ` bg-app-purple text-white text-center hover:bg-black/60 transition duration-500 ${rounded} ${className} ${size} ${paddingMargin} ${fontSize} ${
+        return ` bg-app-purple text-white text-center hover:bg-black hover:ring ring-white transition duration-500 ${rounded} ${className} ${size} ${paddingMargin} ${fontSize} ${
           disabled ? 'opacity-40 cursor-not-allowed' : ''
         }`;
     }

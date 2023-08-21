@@ -3,35 +3,186 @@ import { Inter } from "next/font/google";
 import { Layout } from "@/layouts";
 import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
+import { Carousel } from "@/atoms/carousel";
+import { useState } from "react";
 
+export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 const inter = Inter({ subsets: ["latin"] });
 
+const Categories = [
+  { label: "Magic Mushroom", value: "mushroom" },
+  { label: "Edible", value: "edible" },
+  { label: "Microdose", value: "microdose" },
+  { label: "Merch", value: "merch" },
+];
+const DiffDatas = {
+  mushroom: [
+    {
+      label: "Albino Zilla",
+      value: "albinoZilla",
+      variant: [
+        { g: 7, p: 60 },
+        { g: 14, p: 100 },
+        { g: 28, p: 190 },
+      ],
+    },
+    {
+      label: "Gold Members",
+      value: "goldMembers",
+      variant: [
+        { g: 7, p: 60 },
+        { g: 14, p: 100 },
+        { g: 28, p: 190 },
+      ],
+    },
+    {
+      label: "Gold Teachers",
+      value: "goldTeachers",
+      variant: [
+        { g: 7, p: 60 },
+        { g: 14, p: 100 },
+        { g: 28, p: 190 },
+      ],
+    },
+    {
+      label: "Penis Envy",
+      value: "penisEnvy",
+      variant: [
+        { g: 7, p: 60 },
+        { g: 14, p: 100 },
+        { g: 28, p: 190 },
+      ],
+    },
+    {
+      label: "Trinity",
+      value: "trinity",
+      variant: [
+        { g: 7, p: 60 },
+        { g: 14, p: 100 },
+        { g: 28, p: 190 },
+      ],
+    },
+    {
+      label: "Albino Teachers",
+      value: "albinoTeachers",
+      variant: [
+        { g: 7, p: 70 },
+        { g: 14, p: 120 },
+        { g: 28, p: 230 },
+      ],
+    },
+    {
+      label: "Mckilla Gorilla",
+      value: "mckillaGorilla",
+      variant: [
+        { g: 7, p: 70 },
+        { g: 14, p: 120 },
+        { g: 28, p: 230 },
+      ],
+    },
+    {
+      label: "Tidal Wave",
+      value: "tidalWave",
+      variant: [
+        { g: 7, p: 70 },
+        { g: 14, p: 120 },
+        { g: 28, p: 230 },
+      ],
+    },
+  ],
+
+  edible: [
+    {
+      label: "Dark Chocolate Bar",
+      value: "darkChocolate",
+      variant: [{ g: 4, p: 50 }],
+    },
+    {
+      label: "Dark Chocolate Bar",
+      value: "darkChocolate",
+      variant: [{ g: 4, p: 50 }],
+    },
+    {
+      label: "Milk Chocolate Bar",
+      value: "milkChocolate",
+      variant: [{ g: 4, p: 50 }],
+    },
+    {
+      label: "Peach Gummies",
+      value: "peachGummies",
+      variant: [{ g: 3, p: 45 }],
+    },
+    {
+      label: "Blueberry Gummies",
+      value: "blueGummies",
+      variant: [{ g: 3, p: 45 }],
+    },
+    {
+      label: "Chocolate Gummies",
+      value: "chocolateGummies",
+      variant: [{ g: 3, p: 45 }],
+    },
+  ],
+
+  microdose: [
+    { label: "Focus capsules", value: "focusCapsules", variant: [{ p: 25 }] },
+    {
+      label: "Anxiety capsule",
+      value: "anxietyCapsules",
+      variant: [{ p: 25 }],
+    },
+  ],
+  merch: [
+    { label: "Hoodie", value: "hoodie", variant: [{ p: 120 }] },
+    { label: "Short", value: "short", variant: [{ p: 95 }] },
+
+    { label: "Tee", value: "tee", variant: [{ p: 55 }] },
+
+    { label: "Cap", value: "cap", variant: [{ p: 45 }] },
+
+    { label: "Bucket", value: "bucket", variant: [{ p: 35 }] },
+    { label: "Tote", value: "tote", variant: [{ p: 25 }] },
+  ],
+};
+
 export default function Home() {
-  //build
+  const [selectedCategory, setSelectedCategory] =
+    useState<ICategories>("mushroom");
+  function scrollScreen() {
+    // Scroll smoothly to the new position
+    window.scrollTo({
+      top: window.innerHeight * 0.9,
+      behavior: "smooth",
+    });
+  }
   return (
     <Layout>
       <div className="">
-        <div className=" w-full h-[calc(100vh-4rem)] relative">
+        <div className=" w-full h-[calc(100vh-4rem)] relative overflow-hidden">
           <video
             autoPlay
             muted
             loop
-            className="absolute top-0 left-0 -z-20 w-full h-[calc(100vh-4rem)] object-cover"
+            className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover"
           >
             <source src="/assests/shroom-video4.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div
-            className=" bg-black/40 top-0 left-0 right-0 absolute -z-10 h-[calc(100vh-4rem)]
-           flex justify-center items-center"
-          >
+          <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
             <img
               src="assests/shroom-logo.png"
-              className=" w-fit object-cover transition duration-500"
+              className=" max-w-[14rem] w-fit object-cover transition duration-500"
             />
           </div>
-          <div className=" flex flex-col gap-5 justify-end text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full">
-            <div className=" pl-5 md:pl-10">
+
+          <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
+            <div className=" px-2 md:px-10 mt-[15%] md:mt-0">
+              <div className=" hidden md:inline-block">
+                <img
+                  src="assests/shroom-logo-small.png"
+                  className="max-w-[5rem] w-fit object-cover "
+                />
+              </div>
               <div className=" text-7xl text-app-purple font-semibold custom-white-text-shadow">
                 SHROOM CITY
               </div>
@@ -39,6 +190,47 @@ export default function Home() {
                 Where The Magic Happens
               </div>
             </div>
+            <div className=" flex flex-col justify-center items-center bottom-[10%] left-0 right-0 md:left-[20%] md:right-[-20%] absolute">
+              <Button
+                onClick={scrollScreen}
+                title="Explore More"
+                className=""
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className=" flex flex-col mt-20">
+          <div className="flex gap-4 flex-wrap mx-auto justify-center">
+            {Categories.map((val) => (
+              <div
+                onClick={() => setSelectedCategory(val.value as ICategories)}
+                className={`${
+                  selectedCategory === val.value
+                    ? "bg-app-purple text-white"
+                    : "bg-white text-black"
+                } cursor-pointer w-64  p-4 flex gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
+              >
+                <div>
+                  <img
+                    src="assests/store.png"
+                    className=" w-8 h-8 object-cover"
+                  />
+                </div>
+                <div className=" text-xl font-bold">{val?.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="container mx-auto p-6">
+            <div className=" my-10">
+              <h1 className="text-2xl mb-4 text-center font-semibold">
+                {Categories.find((val) => val?.value === selectedCategory)
+                  ?.label ?? ""}{" "}
+                Products
+              </h1>
+            </div>
+            <Carousel data={DiffDatas[selectedCategory]} />
           </div>
         </div>
 
