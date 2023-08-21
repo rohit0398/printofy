@@ -202,8 +202,8 @@ export default function Home() {
 
         <div className=" flex flex-col mt-20">
           <div className="flex gap-4 flex-wrap mx-auto justify-center">
-            {Categories.map((val) => (
-              <div
+            {Categories.map((val,key) => (
+              <div key={key}
                 onClick={() => setSelectedCategory(val.value as ICategories)}
                 className={`${
                   selectedCategory === val.value
@@ -230,7 +230,7 @@ export default function Home() {
                 Products
               </h1>
             </div>
-            <Carousel data={DiffDatas[selectedCategory]} />
+            <Carousel data={DiffDatas[selectedCategory] as any} />
           </div>
         </div>
 
