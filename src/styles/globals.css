@@ -1,3 +1,5 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 @import "scrollbar.css";
 
 @tailwind base;
@@ -34,6 +36,15 @@ body {
 }
 .custom-purple-text-shadow {
   text-shadow: 2px 2px 4px rgba(213, 0, 249, 0.8);
+}
+
+.circular-gradient {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.6) 30%,
+    /* Darker at the edges */ rgba(0, 0, 0, 1) 100%
+  );
 }
 
 @layer components {
