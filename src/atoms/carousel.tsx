@@ -111,7 +111,7 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
                       paddingMargin="px-auto"
                     />
                   </div>
-                  <div className=" flex justify-center items-center px-2 relative">
+                  <div className=" cursor-pointer flex justify-center items-center px-2 relative">
                     <ShoppingCartIcon
                       className="h-8 w-8 text-app-teal"
                       aria-hidden="true"
