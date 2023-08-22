@@ -71,7 +71,7 @@ export function Header() {
                         item.current
                           ? "bg-app-purple text-white"
                           : "text-gray-300 hover:bg-app-purple hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium"
+                        "rounded-md px-3 py-2 text-sm font-medium uppercase"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
@@ -87,11 +87,11 @@ export function Header() {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
-                  <ShoppingBagIcon className="h-6 w-6" aria-hidden="true" />
+                  <ShoppingBagIcon className="h-6 w-6 text-app-teal" aria-hidden="true" />
                 </button>
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative ml-3">
+                {/* <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
@@ -154,7 +154,7 @@ export function Header() {
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
-                </Menu>
+                </Menu> */}
               </div>
             </div>
           </div>

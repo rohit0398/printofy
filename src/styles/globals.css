@@ -6,53 +6,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/*white theme */
-/* :root {
+@layer components {
+  /*white theme */
+  /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 } */
 
-/*being used to choose black theme */
-/* @media (prefers-color-scheme: dark) { */
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
-}
-/* } */
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* In your CSS file or component */
-.custom-white-text-shadow {
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
-}
-.custom-purple-text-shadow {
-  text-shadow: 2px 2px 4px rgba(213, 0, 249, 0.8);
-}
-
-.circular-gradient {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.6) 30%,
-    /* Darker at the edges */ rgba(0, 0, 0, 1) 100%
-  );
-}
-
-@layer components {
-  .text-gradient {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-app-purple via-white to-app-dark-purple;
+  /*being used to choose black theme */
+  /* @media (prefers-color-scheme: dark) { */
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
+  /* } */
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+      )
+      rgb(var(--background-start-rgb));
+    @apply md:text-base text-xs;
+  }
+
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-app-purple via-app-teal to-app-teal;
+  }
+  
   .border-gradient {
     @apply p-px bg-gradient-to-r from-cyan via-blue to-pink;
   }
@@ -62,6 +47,23 @@ body {
       90deg,
       rgba(0, 240, 255, 0.21) 0%,
       rgba(255, 0, 122, 0) 100%
+    );
+  }
+
+  /* In your CSS file or component */
+  .custom-white-text-shadow {
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  }
+  .custom-purple-text-shadow {
+    text-shadow: 2px 2px 4px rgba(213, 0, 249, 0.8);
+  }
+
+  .circular-gradient {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.6) 30%,
+      /* Darker at the edges */ rgba(0, 0, 0, 1) 100%
     );
   }
 }
