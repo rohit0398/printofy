@@ -223,7 +223,7 @@ export default function Home() {
           </div>
 
           <div className=" flex flex-col mt-20">
-            <div className="flex gap-2 flex-wrap mx-auto justify-center">
+            <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
               {Categories.map((val, key) => (
                 <div
                   key={key}
@@ -244,7 +244,7 @@ export default function Home() {
                       className=" md:w-8 md:h-8 w-6 h-6 object-fill"
                     />
                   </div>
-                  <div className=" md:text-xl text-base font-bold truncate">
+                  <div className=" md:text-base text-xs font-bold truncate">
                     {val?.label}
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function Home() {
 
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
-                <h1 className="text-4xl mb-4 text-center font-semibold">
+                <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
                   {Categories.find((val) => val?.value === selectedCategory)
                     ?.label ?? ""}{" "}
                   Products
@@ -265,7 +265,7 @@ export default function Home() {
 
           <div className=" w-full h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
             <div className=" border-l-2 border-white pl-8">
-              <div className=" text-gradient text-4xl mb-6">
+              <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 WHAT IS SHROOM CITY?
               </div>
               <div className=" text-lg">
@@ -282,7 +282,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className=" text-center text-gradient text-4xl mb-6 mt-16 w-fit mx-auto">
+          <div className=" text-center text-gradient text-4xl mb-6 mt-16 w-fit mx-auto font-aboreto font-bold">
             WHY SHROOM CITY?
           </div>
           <div className=" w-full h-fit mt-8 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -395,7 +395,7 @@ export default function Home() {
 
           <div className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
             <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
-              <div className=" text-gradient text-4xl mb-6">
+              <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 VISIT OUR STORE
               </div>
               <div className=" text-lg">
@@ -430,7 +430,7 @@ export default function Home() {
         <div className=" container">
           <div className=" w-full h-fit mt-16 md:mt-0 py-10 md:py-20  justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
             <div className=" flex flex-col text-white">
-              <div className=" text-4xl font-bold">CONTACT US</div>
+              <div className=" text-4xl font-bold font-aboreto">CONTACT US</div>
               <div className=" text-xl font-semibold mt-6 mb-2">
                 QUESTIONS & INQUIRIES
               </div>
