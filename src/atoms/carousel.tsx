@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import { positiveDifference } from "@/util/helper";
 import { Button } from "./button";
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 export interface Product {
   id?: number;
@@ -36,7 +37,7 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 3000,
     slidesToScroll: 1,
     swipeToSlide: true,
@@ -110,17 +111,15 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
                       paddingMargin="px-auto"
                     />
                   </div>
-                  <div className=" flex justify-center items-center px-2">
-                    <ShoppingBagIcon
+                  <div className=" flex justify-center items-center px-2 relative">
+                    <ShoppingCartIcon
                       className="h-8 w-8 text-app-teal"
                       aria-hidden="true"
                     />
+                    <div className=" absolute z-10 top-0 right-0">
+                      <PlusCircleIcon className=" h-5 w-5 text-app-teal" />
+                    </div>
                   </div>
-                  {/* <Button
-                    variant="out-lined"
-                    title="Cart"
-                    paddingMargin="px-2 xl:px-auto"
-                  /> */}
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
-  ShoppingBagIcon,
+  ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
@@ -87,7 +87,7 @@ export function Header() {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
-                  <ShoppingBagIcon className="h-6 w-6 text-app-teal" aria-hidden="true" />
+                  <ShoppingCartIcon className="h-6 w-6 text-app-teal" aria-hidden="true" />
                 </button>
 
                 {/* Profile dropdown */}
