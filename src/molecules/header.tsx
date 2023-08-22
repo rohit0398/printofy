@@ -5,11 +5,12 @@ import {
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Shop", href: "#", current: true },
   { name: "On Sale", href: "#", current: false },
-  { name: "Location", href: "#", current: false },
+  { name: "Location", href: "/#location-contact", current: false },
 ];
 
 function classNames(...classes: any) {
@@ -17,6 +18,7 @@ function classNames(...classes: any) {
 }
 
 export function Header() {
+  const { push } = useRouter();
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = () => {
@@ -35,7 +37,12 @@ export function Header() {
   }, []);
 
   return (
-    <Disclosure as="nav" className={`w-full h-fit sticky top-0 z-50 transition duration-500 ${scrolled ? 'bg-black': 'bg-transparent'}`}>
+    <Disclosure
+      as="nav"
+      className={`w-full h-fit sticky top-0 z-50 transition duration-500 ${
+        scrolled ? "bg-black" : "bg-transparent"
+      }`}
+    >
       {({ open }) => (
         <>
           <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -53,7 +60,10 @@ export function Header() {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 md:flex-none items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
+                <div
+                  onClick={() => push("/")}
+                  className="flex flex-shrink-0 items-center cursor-pointer"
+                >
                   <img
                     className="h-8 w-auto"
                     src="assests/logo.png"
@@ -82,12 +92,16 @@ export function Header() {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
+                  onClick={() => push("/checkout")}
                   type="button"
                   className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                 >
                   <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <ShoppingCartIcon className="h-6 w-6 text-app-teal" aria-hidden="true" />
+                  <span className="sr-only">cart</span>
+                  <ShoppingCartIcon
+                    className="h-6 w-6 text-app-teal"
+                    aria-hidden="true"
+                  />
                 </button>
 
                 {/* Profile dropdown */}
