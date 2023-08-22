@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import { positiveDifference } from "@/util/helper";
 import { Button } from "./button";
+import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 export interface Product {
   id?: number;
@@ -16,7 +17,7 @@ interface CarouselProps {
 export const Carousel: React.FC<CarouselProps> = ({ data }) => {
   const sliderRef = React.useRef<Slider | null>(null);
   const [activeInd, setActiveInd] = useState<number>(0);
-  const slidesToShow = Array.isArray(data) && data.length > 3 ? 3 : data.length;
+  const slidesToShow = Array.isArray(data) && data.length > 5 ? 5 : data.length;
   function getScale(ind: number) {
     if (data.length < 3) return "";
     let diff = positiveDifference(activeInd, ind);
@@ -41,8 +42,16 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
     swipeToSlide: true,
     className: "center",
     centerMode: true,
-    centerPadding: "70px",
+    centerPadding: "0px",
+    arrows: false,
     responsive: [
+      {
+        breakpoint: 1420,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
       {
         breakpoint: 1024,
         settings: {
@@ -64,7 +73,6 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
       ref={sliderRef}
       beforeChange={(_ind: number, newInd: number) => {
         setActiveInd(newInd);
-        console.log("index", newInd);
       }}
       slidesToShow={slidesToShow}
       {...settings}
@@ -73,24 +81,22 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
         return (
           <div
             key={product.id}
-            className={` px-2 transition duration-500 ${
+            className={`flex px-1 md:px-2 transition duration-500 ${
               ind !== activeInd ? getScale(ind) : ""
             }`}
           >
-            <div
-              className={` border border-white/30 p-4 shadow-md rounded-md max-w-sm`}
-            >
+            <div className={` mx-auto shadow-md rounded-md max-w-sm `}>
               <img
                 src={"assests/product.png"}
                 alt={"img"}
                 className="w-full h-full mb-2 rounded-md object-cover"
               />
-              <div className=" px-4 flex flex-col gap-2">
-                <p className="text-white font-semibold text-base">
+              <div className=" px-1 md:px-4 flex flex-col gap-2">
+                <p className="text-white font-semibold text-lg">
                   {product.label}
                 </p>
                 {product.variant && (
-                  <p className="text-white font-bold text-lg">
+                  <p className="text-white font-bold text-lg mb-2.5">
                     ${product.variant[0]?.p ?? ""}{" "}
                     {product.variant[0]?.g ? ` /${product.variant[0]?.g}g` : ""}
                   </p>
@@ -104,11 +110,17 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
                       paddingMargin="px-auto"
                     />
                   </div>
-                  <Button
+                  <div className=" flex justify-center items-center px-2">
+                    <ShoppingBagIcon
+                      className="h-8 w-8 text-app-teal"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  {/* <Button
                     variant="out-lined"
                     title="Cart"
                     paddingMargin="px-2 xl:px-auto"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

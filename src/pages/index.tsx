@@ -10,11 +10,28 @@ export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 const inter = Inter({ subsets: ["latin"] });
 
 const Categories = [
-  { label: "Magic Mushroom", value: "mushroom" },
-  { label: "Edible", value: "edible" },
-  { label: "Microdose", value: "microdose" },
-  { label: "Merch", value: "merch" },
+  {
+    label: "Magic Mushroom",
+    value: "mushroom",
+    icon: { light: "musroom-icon.png", dark: "musroom-dark-icon.png" },
+  },
+  {
+    label: "Edible",
+    value: "edible",
+    icon: { light: "ediable-icon.png", dark: "ediable-dark-icon.png" },
+  },
+  {
+    label: "Microdose",
+    value: "microdose",
+    icon: { light: "microdose-icon.png", dark: "microdose-dark-icon.png" },
+  },
+  {
+    label: "Merch",
+    value: "merch",
+    icon: { light: "store-icon.png", dark: "store-dark-icon.png" },
+  },
 ];
+
 const DiffDatas = {
   mushroom: [
     {
@@ -156,203 +173,300 @@ export default function Home() {
     });
   }
   return (
-    <Layout>
-      <div className="">
-        <div className=" w-full h-[calc(100vh-4rem)] relative overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover"
-          >
-            <source src="/assests/shroom-video4.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
-            <img
-              src="assests/shroom-logo.png"
-              className=" max-w-[14rem] w-fit object-cover transition duration-500"
-            />
-          </div>
-
-          <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
-            <div className=" px-2 md:px-10 mt-[15%] md:mt-0">
-              <div className=" hidden md:inline-block">
-                <img
-                  src="assests/shroom-logo-small.png"
-                  className="max-w-[5rem] w-fit object-cover "
-                />
-              </div>
-              <div className=" text-7xl text-app-purple font-semibold custom-white-text-shadow">
-                SHROOM CITY
-              </div>
-              <div className=" text-3xl text-white font-bold custom-purple-text-shadow">
-                Where The Magic Happens
-              </div>
-            </div>
-            <div className=" flex flex-col justify-center items-center bottom-[10%] left-0 right-0 md:left-[20%] md:right-[-20%] absolute">
-              <Button
-                onClick={scrollScreen}
-                title="Explore More"
-                className=""
+    <>
+      {" "}
+      <Layout>
+        <div className="">
+          <div className=" w-full h-[calc(100vh-4rem)] relative overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover"
+            >
+              <source src="/assests/shroom-video4.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
+              <img
+                src="assests/shroom-logo.png"
+                className=" max-w-[14rem] w-fit object-cover transition duration-500"
               />
             </div>
-          </div>
-        </div>
 
-        <div className=" flex flex-col mt-20">
-          <div className="flex gap-4 flex-wrap mx-auto justify-center">
-            {Categories.map((val,key) => (
-              <div key={key}
-                onClick={() => setSelectedCategory(val.value as ICategories)}
-                className={`${
-                  selectedCategory === val.value
-                    ? "bg-app-purple text-white"
-                    : "bg-white text-black"
-                } cursor-pointer w-64  p-4 flex gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
-              >
-                <div>
+            <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
+              <div className=" px-2 md:px-10 mt-[15%] md:-mt-20">
+                <div className=" hidden md:inline-block">
                   <img
-                    src="assests/store.png"
-                    className=" w-8 h-8 object-cover"
+                    src="assests/shroom-logo-small.png"
+                    className="max-w-[6rem] w-fit object-cover "
                   />
                 </div>
-                <div className=" text-xl font-bold">{val?.label}</div>
+                <div className=" hidden md:block text-3xl text-white font-bold custom-purple-text-shadow">
+                  Welcome to
+                </div>
+                <div className=" md:text-7xl text-6xl text-app-purple font-semibold custom-white-text-shadow">
+                  SHROOM CITY
+                </div>
+                <div className=" md:text-3xl text-2xl text-white font-bold custom-purple-text-shadow">
+                  Where The Magic Happens
+                </div>
               </div>
-            ))}
-          </div>
-
-          <div className="container mx-auto p-6">
-            <div className=" my-10">
-              <h1 className="text-2xl mb-4 text-center font-semibold">
-                {Categories.find((val) => val?.value === selectedCategory)
-                  ?.label ?? ""}{" "}
-                Products
-              </h1>
-            </div>
-            <Carousel data={DiffDatas[selectedCategory] as any} />
-          </div>
-        </div>
-
-        <div className=" w-full h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
-          <div className=" border-l-2 border-white pl-8">
-            <div className=" text-gradient text-4xl mb-6">Why Shroom City?</div>
-            <div className=" text-lg">
-              <span className=" text-xl">
-                Looking to buy magic mushrooms in Canada?
-              </span>
-              <br />
-              We offer speedy and discrete deliveries right to your door within
-              an hour!
-              <br />
-              Check our delivery area, place an order today, and receive your
-              magic mushrooms within 24 hours or less!
-            </div>
-          </div>
-          <div className=" flex justify-center">
-            <img src="/assests/whyshroomcity.png" alt="image" />
-          </div>
-        </div>
-
-        <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
-          <div className=" flex justify-center order-last md:order-first">
-            <img
-              src="/assests/aboutshroomcity.png"
-              alt="image"
-              className=" max-h-[50vh] md:max-h-[70vh]"
-            />
-          </div>
-          <div className="border-white border-r-2 pr-4 md:border-l-2 md:pl-8 md:border-r-0">
-            <div className=" text-gradient text-4xl mb-6">
-              Exceptional Quality!
-            </div>
-            <div className=" text-lg">
-              At Shroom City, we are dedicated to providing you with mushrooms
-              of unparalleled quality. Our team of experts carefully curates
-              each strain, ensuring that only the finest mushrooms make it to
-              our shelves. We believe that by offering top-notch products, we
-              can enhance your psychedelic experience and help you unlock new
-              dimensions of consciousness.
-            </div>
-
-            <div className=" text-gradient text-4xl mb-6 mt-16">
-              Ethical and Sustainable Practices!
-            </div>
-            <div className=" text-lg">
-              At Shroom City, we believe in responsible and sustainable
-              practices. We prioritize the well-being of our customers and the
-              environment. Our mushrooms are cultivated using eco-friendly
-              methods, minimizing our ecological im
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
-          <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
-            <div className=" text-gradient text-4xl mb-6">VISIT OUR STORE</div>
-            <div className=" text-lg">
-              SHROOM CITY - TORONTO Meet The Best Shroom In The City
-              <br />
-              <span className=" font-bold mt-6">Working hours:</span>
-              <br />
-              Monday-Sunday 10:00 AM to 11:00 PM
-              <br />
-              <span className=" font-bold mt-6"> Address:</span>
-              <br />
-              188 Spadina Ave, Toronto, ON M5T 3A4, Canada
-            </div>
-          </div>
-          <div>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11549.750493389418!2d-79.39735208209021!3d43.63906263764135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b352982d2a06b%3A0x479446ec6338be2c!2sHarbourfront%2C%20Toronto%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sin!4v1692473625178!5m2!1sen!2sin"
-              width="95%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
-
-        <div className="w-full md:h-[90vh] h-fit mt-16 md:mt-0 py-10 md:py-0 bg-app-dark-purple justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
-          <div className=" flex flex-col text-white">
-            <div className=" text-4xl font-bold">CONTACT US</div>
-            <div className=" text-xl font-semibold mt-6">
-              QUESTIONS & INQUIRIES
-            </div>
-            <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField name="First Name" placeholder="First Name" />
-              <InputField name="Last Name" placeholder="Last Name" />
-              <InputField name="Email" placeholder="Email" />
-              <InputField name="Number" placeholder="Number" />
-              <div className=" col-span-2">
-                <textarea
-                  rows={3}
-                  placeholder="Message"
-                  className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray"
+              <div className=" flex flex-col justify-center items-center bottom-[10%] left-0 right-0 md:left-[20%] md:right-[-20%] absolute">
+                <Button
+                  onClick={scrollScreen}
+                  title="Explore More"
+                  className=""
                 />
+              </div>
+            </div>
+          </div>
+
+          <div className=" flex flex-col mt-20">
+            <div className="flex gap-2 flex-wrap mx-auto justify-center">
+              {Categories.map((val, key) => (
+                <div
+                  key={key}
+                  onClick={() => setSelectedCategory(val.value as ICategories)}
+                  className={`${
+                    selectedCategory === val.value
+                      ? "bg-app-purple text-white"
+                      : "bg-white text-black"
+                  } cursor-pointer w-44 md:w-64 py-2 px-1 md:p-4 flex gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
+                >
+                  <div>
+                    <img
+                      src={`assests/${
+                        selectedCategory === val.value
+                          ? val.icon.light
+                          : val.icon.dark
+                      }`}
+                      className=" md:w-8 md:h-8 w-6 h-6 object-fill"
+                    />
+                  </div>
+                  <div className=" md:text-xl text-base font-bold truncate">
+                    {val?.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="container mx-auto p-6 md:p-2">
+              <div className=" my-10">
+                <h1 className="text-4xl mb-4 text-center font-semibold">
+                  {Categories.find((val) => val?.value === selectedCategory)
+                    ?.label ?? ""}{" "}
+                  Products
+                </h1>
+              </div>
+              <Carousel data={DiffDatas[selectedCategory] as any} />
+            </div>
+          </div>
+
+          <div className=" w-full h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+            <div className=" border-l-2 border-white pl-8">
+              <div className=" text-gradient text-4xl mb-6">
+                WHAT IS SHROOM CITY?
+              </div>
+              <div className=" text-lg">
+                Welcome to Shroom City, your ultimate destination for
+                psychedelic mushrooms! We are thrilled to introduce you to our
+                unique selection of high-quality mushrooms that will take you on
+                a mind-bending journey like no other. Allow us to share with you
+                why Shroom City is the go-to store for your psychedelic
+                exploration.
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <img src="/assests/what-is-mushroom.png" alt="image" />
+            </div>
+          </div>
+
+          <div className=" text-center text-gradient text-4xl mb-6 mt-16 w-fit mx-auto">
+            WHY SHROOM CITY?
+          </div>
+          <div className=" w-full h-fit mt-8 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className=" flex justify-center order-last md:order-first">
+              <img
+                src="/assests/whyshroomcity.png"
+                alt="image"
+                className=" max-h-[50vh] md:max-h-[70vh]"
+              />
+            </div>
+            <div className="border-white border-r-2 pr-4 md:border-l-2 md:pl-8 md:border-r-0">
+              <div className=" text-app-teal text-xl mb-3">
+                1: Exceptional Quality
+              </div>
+              <div className=" text-lg">
+                At Shroom City, we are dedicated to providing you with mushrooms
+                of unparalleled quality. Our team of experts carefully curates
+                each strain, ensuring that only the finest mushrooms make it to
+                our shelves. We believe that by offering top-notch products, we
+                can enhance your psychedelic experience and help you unlock new
+                dimensions of consciousness.
+              </div>
+
+              <div className=" text-app-teal text-xl mb-3 mt-10">
+                2. Extensive Variety
+              </div>
+              <div className=" text-lg">
+                {`As residents of Shroom City, we take pride in our vast selection
+                of mushroom strains. From classic varieties to rare and exotic
+                species, our store offers a diverse range to suit every
+                individual's preferences. Whether you're seeking a profound
+                spiritual journey or a joyous and creative exploration, Shroom
+                City has the perfect mushroom for you.`}
+              </div>
+            </div>
+          </div>
+
+          <div className=" w-full h-fit py-10 mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+            <div className=" border-l-2 border-white pl-8">
+              <div className=" text-app-teal text-xl mb-3">
+                3. Rigorous Safety Standards
+              </div>
+              <div className=" text-lg">
+                Your safety is of paramount importance to us. We strictly adhere
+                to rigorous safety standards throughout the cultivation and
+                distribution process. Our mushrooms are grown under controlled
+                conditions, ensuring a clean and contaminant-free product. With
+                Shroom City, you can embark on your psychedelic adventure with
+                confidence and peace of mind.
+              </div>
+
+              <div className=" text-app-teal text-xl mb-3">
+                4. Ethical and Sustainable Practices
+              </div>
+              <div className=" text-lg">
+                At Shroom City, we believe in responsible and sustainable
+                practices. We prioritize the well-being of our customers and the
+                environment. Our mushrooms are cultivated using eco- friendly
+                methods, minimizing our ecological impact. By choosing Shroom
+                City, you support ethical business practices and contribute to
+                the preservation of our planet.
+              </div>
+            </div>
+            <div className=" flex justify-center">
+              <img src="/assests/safty.png" alt="image" />
+            </div>
+          </div>
+
+          <div className=" w-full h-fit py-10 mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+            <div className=" flex justify-center order-last md:order-first py-5 md:py-0">
+              <img
+                src="/assests/guidance.png"
+                alt="image"
+                className=" max-h-[50vh] md:max-h-[70vh]"
+              />
+            </div>
+            <div className="border-white border-r-2 pr-4 md:border-l-2 md:pl-8 md:border-r-0">
+              <div className=" text-app-teal text-xl mb-3">
+                5. Rigorous Safety Standards
+              </div>
+              <div className=" text-lg">
+                Your safety is of paramount importance to us. We strictly adhere
+                to rigorous safety standards throughout the cultivation and
+                distribution process. Our mushrooms are grown under controlled
+                conditions, ensuring a clean and contaminant-free product. With
+                Shroom City, you can embark on your psychedelic adventure with
+                confidence and peace of mind.
+              </div>
+
+              <div className=" text-app-teal text-xl mb-3 mt-10">
+                6. Expert Guidance and Support
+              </div>
+              <div className=" text-lg">
+                {`We understand that embarking on a psychedelic journey can be
+                both exciting and intimidating. That's why our knowledgeable
+                team is here to guide and support you every step of the way. We
+                are passionate about psychedelics and are well-versed in their
+                effects. Count on us to provide you with expert advice, answer
+                your questions, and ensure a safe and transformative experience.`}
+                <br />
+                <br />
+                {`Shroom City is more than just a store; it's a gateway to
+                mind-altering experiences that can expand your consciousness and
+                foster personal growth. With our commitment to quality, safety,
+                and sustainability, we have earned a reputation as the premier
+                destination for frictional psychedelic mushrooms.`}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
+            <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
+              <div className=" text-gradient text-4xl mb-6">
+                VISIT OUR STORE
+              </div>
+              <div className=" text-lg">
+                SHROOM CITY - TORONTO Meet The Best Shroom In The City
+                <br />
+                <span className=" font-bold mt-6 text-app-teal">
+                  Working hours:
+                </span>
+                <br />
+                Monday-Sunday 10:00 AM to 11:00 PM
+                <br />
+                <span className=" font-bold mt-6 text-app-teal"> Address:</span>
+                <br />
+                188 Spadina Ave, Toronto, ON M5T 3A4, Canada
               </div>
             </div>
             <div>
-              <Button title="Submit" className=" mt-6" />
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11549.750493389418!2d-79.39735208209021!3d43.63906263764135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b352982d2a06b%3A0x479446ec6338be2c!2sHarbourfront%2C%20Toronto%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sin!4v1692473625178!5m2!1sen!2sin"
+                width="100%"
+                height="300"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
-          <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
-            <div className=" flex gap-4 md:self-end">
-              <img
-                src="/assests/instagram.png"
-                alt="image"
-                className=" w-fit"
-              />
-              <img src="/assests/tiktok.png" alt="image" className=" w-fit" />
+        </div>
+      </Layout>
+      <div className="bg-app-dark-purple">
+        <div className=" container">
+          <div className=" w-full h-fit mt-16 md:mt-0 py-10 md:py-20  justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
+            <div className=" flex flex-col text-white">
+              <div className=" text-4xl font-bold">CONTACT US</div>
+              <div className=" text-xl font-semibold mt-6 mb-2">
+                QUESTIONS & INQUIRIES
+              </div>
+              <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField name="First Name" placeholder="First Name" />
+                <InputField name="Last Name" placeholder="Last Name" />
+                <InputField name="Email" placeholder="Email" />
+                <InputField name="Number" placeholder="Number" />
+                <div className=" col-span-2">
+                  <textarea
+                    rows={3}
+                    placeholder="Message"
+                    className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray"
+                  />
+                </div>
+              </div>
+              <div>
+                <Button title="Submit" className=" mt-6" />
+              </div>
             </div>
-            <div className=" text-base font-semibold md:self-end">
-              2023 Copyright Shroomcity.io | All reserved copyright
+            <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
+              <div className=" flex gap-4 md:self-end">
+                <img
+                  src="/assests/instagram.png"
+                  alt="image"
+                  className=" w-fit"
+                />
+                <img src="/assests/tiktok.png" alt="image" className=" w-fit" />
+              </div>
+              <div className=" text-base font-semibold md:self-end">
+                2023 Copyright Shroomcity.io | All reserved copyright
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
