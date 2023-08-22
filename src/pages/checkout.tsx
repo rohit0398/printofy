@@ -49,7 +49,7 @@ export default function Checkout() {
                   src="assests/product.png"
                   className=" w-20 h-20 object-cover rounded"
                 />
-                <div className=" flex flex-col gap-2">
+                <div className=" flex flex-col gap-2 font-semibold">
                   <span>Magic Mushroom</span>
                   <div className=" flex gap-2">
                     <span>$60</span> <span>X</span> <span>1</span>
@@ -57,7 +57,7 @@ export default function Checkout() {
                 </div>
               </div>
 
-              <div className=" flex items-center justify-between py-4 px-4 my-10 gap-4 bg-gray-800 text-xl font-semibold rounded">
+              <div className=" flex items-center justify-between py-4 px-4 my-10 gap-4 bg-gray-800 font-semibold rounded">
                 <span>Grand Total</span>
                 <span>$60</span>
               </div>
