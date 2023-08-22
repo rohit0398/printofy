@@ -393,7 +393,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
+          <div id="location-contact" className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
             <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 VISIT OUR STORE
