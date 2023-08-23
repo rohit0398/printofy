@@ -3,9 +3,10 @@ import { Inter } from "next/font/google";
 import { Layout } from "@/layouts";
 import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
-import { Carousel } from "@/atoms/carousel";
+import { Carousel, IProduct } from "@/atoms/carousel";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 const inter = Inter({ subsets: ["latin"] });
@@ -164,14 +165,14 @@ const DiffDatas = {
 };
 
 export default function Home() {
-  const { register } = useForm<FormData>(
-    {
-      defaultValues: {},
-    }
-  );
+  const { push } = useRouter();
+  const { register } = useForm<FormData>({
+    defaultValues: {},
+  });
 
   const [selectedCategory, setSelectedCategory] =
     useState<ICategories>("mushroom");
+
   function scrollScreen() {
     // Scroll smoothly to the new position
     window.scrollTo({
@@ -179,6 +180,13 @@ export default function Home() {
       behavior: "smooth",
     });
   }
+
+  function handleProductClick(product: IProduct, cart: boolean) {
+    if (cart) {
+      console.log("cart", product);
+    } else push("/checkout");
+  }
+
   return (
     <>
       {" "}
@@ -237,17 +245,13 @@ export default function Home() {
                   onClick={() => setSelectedCategory(val.value as ICategories)}
                   className={`${
                     selectedCategory === val.value
-                      ? "bg-app-purple text-white"
-                      : "bg-white text-black"
+                      ? "bg-app-purple/50 text-white"
+                      : "bg-[#ffffff33] backdrop-blur-sm text-white"
                   } cursor-pointer w-44 md:w-64 py-2 px-1 md:p-4 flex gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
                   <div>
                     <img
-                      src={`assests/${
-                        selectedCategory === val.value
-                          ? val.icon.light
-                          : val.icon.dark
-                      }`}
+                      src={`assests/${val.icon.light}`}
                       className=" md:w-8 md:h-8 w-6 h-6 object-fill"
                     />
                   </div>
@@ -266,12 +270,15 @@ export default function Home() {
                   Products
                 </h1>
               </div>
-              <Carousel data={DiffDatas[selectedCategory] as any} />
+              <Carousel
+                data={DiffDatas[selectedCategory] as any}
+                onClickButton={handleProductClick}
+              />
             </div>
           </div>
 
-          <div className=" w-full h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
-            <div className=" border-l-2 border-white pl-8">
+          <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+            <div className=" md:border-l-2 md:border-white border-none md:pl-8 pl-0">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 WHAT IS SHROOM CITY?
               </div>
@@ -284,15 +291,19 @@ export default function Home() {
                 exploration.
               </div>
             </div>
-            <div className=" flex justify-center">
-              <img src="/assests/what-is-mushroom.png" alt="image" />
+            <div className=" flex justify-center md:order-last order-first">
+              <img
+                src="/assests/what-is-mushroom.png"
+                alt="image"
+                className=" w-[50%] md:w-auto"
+              />
             </div>
           </div>
 
-          <div className=" text-center text-gradient text-4xl mb-6 mt-16 w-fit mx-auto font-aboreto font-bold">
+          <div className=" text-center text-gradient text-4xl md:mt-16 mt-20 w-fit mx-auto font-aboreto font-bold">
             WHY SHROOM CITY?
           </div>
-          <div className=" w-full h-fit mt-8 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className=" w-full h-fit mt-2 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className=" flex justify-center order-last md:order-first">
               <img
                 src="/assests/whyshroomcity.png"
@@ -300,7 +311,7 @@ export default function Home() {
                 className=" max-h-[50vh] md:max-h-[70vh]"
               />
             </div>
-            <div className="border-white border-r-2 pr-4 md:border-l-2 md:pl-8 md:border-r-0">
+            <div className="pr-4">
               <div className=" text-app-teal text-xl mb-3">
                 1: Exceptional Quality
               </div>
@@ -327,8 +338,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className=" w-full h-fit py-10 mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
-            <div className=" border-l-2 border-white pl-8">
+          <div className=" w-full h-fit md:py-10 pt-10 mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+            <div className=" md:border-l-2 md:border-white md:pl-8">
               <div className=" text-app-teal text-xl mb-3">
                 3. Rigorous Safety Standards
               </div>
@@ -341,7 +352,7 @@ export default function Home() {
                 confidence and peace of mind.
               </div>
 
-              <div className=" text-app-teal text-xl mb-3">
+              <div className=" text-app-teal text-xl mb-3 mt-10">
                 4. Ethical and Sustainable Practices
               </div>
               <div className=" text-lg">
@@ -366,21 +377,9 @@ export default function Home() {
                 className=" max-h-[50vh] md:max-h-[70vh]"
               />
             </div>
-            <div className="border-white border-r-2 pr-4 md:border-l-2 md:pl-8 md:border-r-0">
+            <div className="pr-4">
               <div className=" text-app-teal text-xl mb-3">
-                5. Rigorous Safety Standards
-              </div>
-              <div className=" text-lg">
-                Your safety is of paramount importance to us. We strictly adhere
-                to rigorous safety standards throughout the cultivation and
-                distribution process. Our mushrooms are grown under controlled
-                conditions, ensuring a clean and contaminant-free product. With
-                Shroom City, you can embark on your psychedelic adventure with
-                confidence and peace of mind.
-              </div>
-
-              <div className=" text-app-teal text-xl mb-3 mt-10">
-                6. Expert Guidance and Support
+                5. Expert Guidance and Support
               </div>
               <div className=" text-lg">
                 {`We understand that embarking on a psychedelic journey can be
@@ -404,7 +403,7 @@ export default function Home() {
             id="location-contact"
             className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10"
           >
-            <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
+            <div className=" flex flex-col gap-4 md:border-l-2 md:border-white md:pl-8">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 VISIT OUR STORE
               </div>
@@ -436,7 +435,7 @@ export default function Home() {
           </div>
         </div>
       </Layout>
-      <div className="bg-app-dark-purple">
+      <div className="bg-app-dark-gray">
         <div className=" container">
           <div className=" w-full h-fit mt-16 md:mt-0 py-10 md:py-20  justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
             <div className=" flex flex-col text-white">
@@ -469,7 +468,7 @@ export default function Home() {
                   <textarea
                     rows={3}
                     placeholder="Message"
-                    className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray"
+                    className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray bg-app-dark-gray"
                   />
                 </div>
               </div>

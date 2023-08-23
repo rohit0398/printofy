@@ -17,6 +17,7 @@ module.exports = {
         "app-purple": "#E93CCF",
         "app-dark-purple": "#932582",
         "app-teal": "#4BC1C1",
+        "app-dark-gray": "#121212",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

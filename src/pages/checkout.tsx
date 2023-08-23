@@ -50,13 +50,13 @@ export default function Checkout() {
         <div className=" text-gradient text-4xl font-bold font-aboreto w-fit mx-auto mb-20">
           Cart Checkout
         </div>
-        <div className=" grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className=" mx-8">
-            <div className=" p-4 border border-white/40 rounded-lg">
+        <div className=" grid grid-cols-1 md:grid-cols-2 gap-8 mx-2">
+          <div className="">
+            <div className=" md:p-4 px-2 py-4 border border-white/40 rounded-lg">
               <div className=" flex gap-4 justify-between">
-                <div className=" flex gap-4 items-center">
+                <div className=" flex items-center gap-2">
                   <MapPinIcon className=" w-8 h-8 text-white" />{" "}
-                  <span>Shipping Address</span>
+                  <span className=" font-semibold md:text-xl text-lg">Shipping Address</span>
                 </div>
                 <div
                   onClick={() => setAddAddress(true)}
@@ -89,13 +89,13 @@ export default function Checkout() {
               )}
             </div>
           </div>
-          <div className=" mx-8">
+          <div className="">
             <div className=" p-4 border border-white/40 rounded-lg">
               <div className=" flex gap-4 items-center">
-                <div className=" rounded-full bg-gray-800 p-1">
+                <div className=" rounded-full bg-gray-800 p-3">
                   <ShoppingCartIcon className=" w-7 h-7 text-white" />
                 </div>
-                <span>You are buying</span>
+                <span className=" font-semibold text-xl">You are buying</span>
               </div>
 
               <div className=" flex items-center mt-10 gap-4">
@@ -111,7 +111,7 @@ export default function Checkout() {
                 </div>
               </div>
 
-              <div className=" flex items-center justify-between py-4 px-4 my-10 gap-4 bg-gray-800 font-semibold rounded">
+              <div className=" flex items-center justify-between py-2 px-4 my-5 gap-4 bg-gray-800 font-semibold rounded">
                 <span>Grand Total</span>
                 <span>$60</span>
               </div>
@@ -123,9 +123,9 @@ export default function Checkout() {
         <Modal open={addAddress} setOpen={(bool) => setAddAddress(bool)}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className=" max-w-md mb-10 mx-5"
+            className=" max-w-md mb-5 mx-5"
           >
-            <div className=" text-gradient text-lg font-semibold w-fit text-start mb-10">
+            <div className=" font-aboreto text-gradient text-xl font-bold w-fit text-start mb-5">
               Add Address
             </div>
             <div className="space-y-4">
