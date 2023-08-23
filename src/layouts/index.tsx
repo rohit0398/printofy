@@ -1,6 +1,7 @@
-import { Header } from '@/molecules/header';
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
+import { Header } from "@/molecules/header";
 
+import { ToastContainer } from "react-toastify";
 
 type IProps = {
   children: ReactNode;
@@ -11,6 +12,10 @@ export function Layout({ children }: IProps) {
     <div className="container flex flex-col w-screen">
       <Header />
       {children}
+      <ToastContainer
+        theme="dark"
+        className={"mt-10"}
+      />
     </div>
   );
 }

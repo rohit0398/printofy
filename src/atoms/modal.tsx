@@ -12,7 +12,7 @@ type IProps = {
 export function Modal({
   open,
   setOpen,
-  width = "sm:max-w-lg w-full",
+  width = "md:max-w-lg w-full",
   children,
 }: IProps) {
   return (

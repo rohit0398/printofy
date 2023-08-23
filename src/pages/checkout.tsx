@@ -1,13 +1,15 @@
 import { Button } from "@/atoms/button";
 import { InputField } from "@/atoms/input";
 import { Modal } from "@/atoms/modal";
+import { useCart } from "@/context/cartContext";
 import { Layout } from "@/layouts";
 import {
   MapPinIcon,
   PlusCircleIcon,
   ShoppingCartIcon,
+  RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface FormData {
@@ -23,7 +25,9 @@ interface FormData {
 }
 
 export default function Checkout() {
+  const { cartState } = useCart();
   const [addAddress, setAddAddress] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
   const { register, handleSubmit, formState, reset, watch } = useForm<FormData>(
     {
       defaultValues: {
@@ -39,10 +43,21 @@ export default function Checkout() {
       },
     }
   );
+
+  function handlePlaceOrder() {
+    setOrderSuccess(true);
+  }
   const onSubmit = async (values: FormData) => {
-    console.log(values);
+    setAddAddress(false);
   };
   const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
+  const grandTotal = useMemo(() => {
+    return cartState.reduce(
+      (total, item) =>
+        total + (item.variant ? item.variant[0]?.p : 1) * (item?.count ?? 1),
+      0
+    );
+  }, [cartState]);
 
   return (
     <Layout>
@@ -56,7 +71,9 @@ export default function Checkout() {
               <div className=" flex gap-4 justify-between">
                 <div className=" flex items-center gap-2">
                   <MapPinIcon className=" w-8 h-8 text-white" />{" "}
-                  <span className=" font-semibold md:text-xl text-lg">Shipping Address</span>
+                  <span className=" font-semibold md:text-xl text-lg">
+                    Shipping Address
+                  </span>
                 </div>
                 <div
                   onClick={() => setAddAddress(true)}
@@ -93,30 +110,43 @@ export default function Checkout() {
             <div className=" p-4 border border-white/40 rounded-lg">
               <div className=" flex gap-4 items-center">
                 <div className=" rounded-full bg-gray-800 p-3">
-                  <ShoppingCartIcon className=" w-7 h-7 text-white" />
+                  <ShoppingCartIcon className=" w-6 h-6 text-white" />
                 </div>
                 <span className=" font-semibold text-xl">You are buying</span>
               </div>
 
-              <div className=" flex items-center mt-10 gap-4">
-                <img
-                  src="assests/product.png"
-                  className=" w-20 h-20 object-cover rounded"
-                />
-                <div className=" flex flex-col gap-2 font-semibold">
-                  <span>Magic Mushroom</span>
-                  <div className=" flex gap-2">
-                    <span>$60</span> <span>X</span> <span>1</span>
+              {cartState.map((product, ind) => (
+                <div key={ind} className=" flex items-center mt-10 gap-4">
+                  <img
+                    src="assests/product.png"
+                    className=" w-16 h-16 object-cover rounded"
+                  />
+                  <div className=" flex flex-col gap-2 font-semibold">
+                    <span>{product?.label}</span>
+                    <div className=" flex gap-2">
+                      {product?.variant && (
+                        <span>
+                          ${product?.variant[0]?.p}
+                          {" /"}
+                          {product?.variant[0]?.g}g
+                        </span>
+                      )}
+                      <span>X</span> <span>{product?.count ?? 1}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
 
               <div className=" flex items-center justify-between py-2 px-4 my-5 gap-4 bg-gray-800 font-semibold rounded">
                 <span>Grand Total</span>
-                <span>$60</span>
+                <span>${grandTotal}</span>
               </div>
 
-              <Button title="Place Order" className=" w-full" />
+              <Button
+                onClick={handlePlaceOrder}
+                title="Place Order"
+                className=" w-full"
+              />
             </div>
           </div>
         </div>
@@ -212,6 +242,14 @@ export default function Checkout() {
               <Button onClick={() => setAddAddress(false)} title="Cancel" />
             </div>
           </form>
+        </Modal>
+        <Modal open={orderSuccess} setOpen={(bool) => setOrderSuccess(bool)}>
+          <div className=" flex flex-col gap-5 justify-between items-center p-10">
+            <RocketLaunchIcon className=" w-32 h-32" />
+            <div className=" font-aboreto text-2xl font-semibold">
+              Order Placed Successfully
+            </div>
+          </div>
         </Modal>
       </div>
     </Layout>
