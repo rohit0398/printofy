@@ -8,9 +8,42 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface FormData {
+  name: string;
+  address: string;
+  landmark: string;
+  city: string;
+  state: string;
+  country: string;
+  code: string;
+  mobile: string;
+  email: string;
+}
 
 export default function Checkout() {
   const [addAddress, setAddAddress] = useState(false);
+  const { register, handleSubmit, formState, reset, watch } = useForm<FormData>(
+    {
+      defaultValues: {
+        name: "",
+        address: "",
+        landmark: "",
+        city: "",
+        state: "",
+        country: "",
+        code: "",
+        mobile: "",
+        email: "",
+      },
+    }
+  );
+  const onSubmit = async (values: FormData) => {
+    console.log(values);
+  };
+  const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
+
   return (
     <Layout>
       <div className=" py-20">
@@ -33,6 +66,27 @@ export default function Checkout() {
                   <span>Add Address</span>
                 </div>
               </div>
+              {values?.name && (
+                <div className="flex flex-col gap-1 text-base pl-4 mt-10">
+                  <div className=" font-extrabold">{values?.name}</div>
+                  <div>{values?.address}</div>
+                  <div>{values?.landmark}</div>
+                  <div className=" flex gap-1">
+                    <span>{values?.city},</span>
+                    <span>{values?.state},</span>
+                    <span>{values?.country}</span>
+                  </div>
+                  <div>{values?.code}</div>
+                  <div className=" flex flex-wrap gap-2">
+                    <div className="py-1 px-2 bg-gray-800 rounded">
+                      {values?.mobile}
+                    </div>
+                    <div className="py-1 px-2 bg-gray-800 rounded">
+                      {values?.email}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className=" mx-8">
@@ -68,30 +122,94 @@ export default function Checkout() {
         </div>
         <Modal open={addAddress} setOpen={(bool) => setAddAddress(bool)}>
           <form
-            // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             className=" max-w-md mb-10 mx-5"
           >
-            <div className=" text-gradient text-lg font-semibold w-fit text-start mb-10">Add Address</div>
+            <div className=" text-gradient text-lg font-semibold w-fit text-start mb-10">
+              Add Address
+            </div>
             <div className="space-y-4">
-              <InputField name="name" label="Contact Name" />
-              <InputField name="email" label="Email" type="email" />
-              <InputField name="mobile" label="Mobile" type="number" />
-              <InputField name="address" label="Address" />
-              <InputField name="landmark" label="Landmark" />
+              <InputField
+                formState={formState}
+                register={register}
+                name="name"
+                label="Contact Name"
+                rules={{
+                  required: "This is a required field.",
+                }}
+              />
+              <InputField
+                formState={formState}
+                register={register}
+                name="email"
+                label="Email"
+                type="email"
+                rules={{
+                  required: "This is a required field.",
+                }}
+              />
+              <InputField
+                formState={formState}
+                register={register}
+                name="mobile"
+                label="Mobile"
+                type="number"
+                rules={{
+                  required: "This is a required field.",
+                }}
+              />
+              <InputField
+                formState={formState}
+                register={register}
+                name="address"
+                label="Address"
+                rules={{
+                  required: "This is a required field.",
+                }}
+              />
+              <InputField
+                formState={formState}
+                register={register}
+                name="landmark"
+                label="Landmark"
+              />
 
               <div className=" grid grid-cols-2 gap-4">
-                <InputField name="code" label="Postal Code" />
-                <InputField name="country" label="Country" />
+                <InputField
+                  formState={formState}
+                  register={register}
+                  name="code"
+                  label="Postal Code"
+                  rules={{
+                    required: "This is a required field.",
+                  }}
+                />
+                <InputField
+                  formState={formState}
+                  register={register}
+                  name="country"
+                  label="Country"
+                />
               </div>
               <div className=" grid grid-cols-2 gap-4">
-                <InputField name="city" label="City" />
-                <InputField name="state" label="State" />
+                <InputField
+                  formState={formState}
+                  register={register}
+                  name="city"
+                  label="City"
+                />
+                <InputField
+                  formState={formState}
+                  register={register}
+                  name="state"
+                  label="State"
+                />
               </div>
             </div>
 
             <div className="mt-12 grid grid-cols-2 items-center justify-between gap-x-4">
-              <Button title="Save" />
-              <Button title="Cancel" />
+              <Button type="submit" title="Save" />
+              <Button onClick={() => setAddAddress(false)} title="Cancel" />
             </div>
           </form>
         </Modal>

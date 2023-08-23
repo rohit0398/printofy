@@ -1,5 +1,5 @@
 import React from 'react';
-// import type { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 
 type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -9,7 +9,7 @@ type InputProps = React.DetailedHTMLProps<
 interface CustomInputProps<T extends Record<string, any>> extends InputProps {
   label?: string;
   name: any;
-  // register: UseFormRegister<T>;
+  register: UseFormRegister<T>;
   formState?: any;
   validate?: any;
   rules?: any;
@@ -18,7 +18,7 @@ interface CustomInputProps<T extends Record<string, any>> extends InputProps {
 export const InputField = <T extends Record<string, any>>({
   label,
   name,
-  // register,
+  register,
   formState,
   rules = {},
   validate = {},
@@ -33,9 +33,9 @@ export const InputField = <T extends Record<string, any>>({
         </label>
       )}
       <input
-        // {...register(name, { ...rules, validate })}
+        {...register(name, { ...rules, validate })}
         {...rest}
-        className={`block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray ${
+        className={`block text-gray-800 min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray ${
           error ? 'border-red-500' : 'border-light-gray'
         }`}
       />

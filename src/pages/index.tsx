@@ -5,6 +5,7 @@ import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
 import { Carousel } from "@/atoms/carousel";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 const inter = Inter({ subsets: ["latin"] });
@@ -163,6 +164,12 @@ const DiffDatas = {
 };
 
 export default function Home() {
+  const { register } = useForm<FormData>(
+    {
+      defaultValues: {},
+    }
+  );
+
   const [selectedCategory, setSelectedCategory] =
     useState<ICategories>("mushroom");
   function scrollScreen() {
@@ -393,7 +400,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="location-contact" className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10">
+          <div
+            id="location-contact"
+            className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10"
+          >
             <div className=" flex flex-col gap-4 border-l-2 border-white pl-8">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 VISIT OUR STORE
@@ -435,10 +445,26 @@ export default function Home() {
                 QUESTIONS & INQUIRIES
               </div>
               <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField name="First Name" placeholder="First Name" />
-                <InputField name="Last Name" placeholder="Last Name" />
-                <InputField name="Email" placeholder="Email" />
-                <InputField name="Number" placeholder="Number" />
+                <InputField
+                  register={register}
+                  name="First Name"
+                  placeholder="First Name"
+                />
+                <InputField
+                  register={register}
+                  name="Last Name"
+                  placeholder="Last Name"
+                />
+                <InputField
+                  register={register}
+                  name="Email"
+                  placeholder="Email"
+                />
+                <InputField
+                  register={register}
+                  name="Number"
+                  placeholder="Number"
+                />
                 <div className=" col-span-2">
                   <textarea
                     rows={3}
@@ -448,7 +474,7 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <Button title="Submit" className=" mt-6" />
+                <Button type="submit" title="Submit" className=" mt-6" />
               </div>
             </div>
             <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
