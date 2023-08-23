@@ -1,15 +1,14 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import { Layout } from "@/layouts";
 import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
-import { Carousel, IProduct } from "@/atoms/carousel";
+import { ProductCarousel, IProduct } from "@/atoms/productCarousel";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useCart } from "@/context/cartContext";
 
 export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
-const inter = Inter({ subsets: ["latin"] });
 
 const Categories = [
   {
@@ -37,6 +36,7 @@ const Categories = [
 const DiffDatas = {
   mushroom: [
     {
+      id: 1,
       label: "Albino Zilla",
       value: "albinoZilla",
       variant: [
@@ -46,6 +46,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 2,
       label: "Gold Members",
       value: "goldMembers",
       variant: [
@@ -55,6 +56,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 3,
       label: "Gold Teachers",
       value: "goldTeachers",
       variant: [
@@ -64,6 +66,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 4,
       label: "Penis Envy",
       value: "penisEnvy",
       variant: [
@@ -73,6 +76,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 5,
       label: "Trinity",
       value: "trinity",
       variant: [
@@ -82,6 +86,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 6,
       label: "Albino Teachers",
       value: "albinoTeachers",
       variant: [
@@ -91,6 +96,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 7,
       label: "Mckilla Gorilla",
       value: "mckillaGorilla",
       variant: [
@@ -100,6 +106,7 @@ const DiffDatas = {
       ],
     },
     {
+      id: 8,
       label: "Tidal Wave",
       value: "tidalWave",
       variant: [
@@ -109,63 +116,96 @@ const DiffDatas = {
       ],
     },
   ],
-
   edible: [
     {
+      id: 9,
       label: "Dark Chocolate Bar",
       value: "darkChocolate",
       variant: [{ g: 4, p: 50 }],
     },
     {
-      label: "Dark Chocolate Bar",
-      value: "darkChocolate",
-      variant: [{ g: 4, p: 50 }],
-    },
-    {
+      id: 10,
       label: "Milk Chocolate Bar",
       value: "milkChocolate",
       variant: [{ g: 4, p: 50 }],
     },
     {
+      id: 11,
       label: "Peach Gummies",
       value: "peachGummies",
       variant: [{ g: 3, p: 45 }],
     },
     {
+      id: 12,
       label: "Blueberry Gummies",
       value: "blueGummies",
       variant: [{ g: 3, p: 45 }],
     },
     {
+      id: 13,
       label: "Chocolate Gummies",
       value: "chocolateGummies",
       variant: [{ g: 3, p: 45 }],
     },
   ],
-
   microdose: [
-    { label: "Focus capsules", value: "focusCapsules", variant: [{ p: 25 }] },
     {
+      id: 14,
+      label: "Focus capsules",
+      value: "focusCapsules",
+      variant: [{ p: 25 }],
+    },
+    {
+      id: 15,
       label: "Anxiety capsule",
       value: "anxietyCapsules",
       variant: [{ p: 25 }],
     },
   ],
   merch: [
-    { label: "Hoodie", value: "hoodie", variant: [{ p: 120 }] },
-    { label: "Short", value: "short", variant: [{ p: 95 }] },
-
-    { label: "Tee", value: "tee", variant: [{ p: 55 }] },
-
-    { label: "Cap", value: "cap", variant: [{ p: 45 }] },
-
-    { label: "Bucket", value: "bucket", variant: [{ p: 35 }] },
-    { label: "Tote", value: "tote", variant: [{ p: 25 }] },
+    {
+      id: 16,
+      label: "Hoodie",
+      value: "hoodie",
+      variant: [{ p: 120 }],
+    },
+    {
+      id: 17,
+      label: "Short",
+      value: "short",
+      variant: [{ p: 95 }],
+    },
+    {
+      id: 18,
+      label: "Tee",
+      value: "tee",
+      variant: [{ p: 55 }],
+    },
+    {
+      id: 19,
+      label: "Cap",
+      value: "cap",
+      variant: [{ p: 45 }],
+    },
+    {
+      id: 20,
+      label: "Bucket",
+      value: "bucket",
+      variant: [{ p: 35 }],
+    },
+    {
+      id: 21,
+      label: "Tote",
+      value: "tote",
+      variant: [{ p: 25 }],
+    },
   ],
 };
 
 export default function Home() {
   const { push } = useRouter();
+  const { cartDispatch } = useCart();
+
   const { register } = useForm<FormData>({
     defaultValues: {},
   });
@@ -182,14 +222,15 @@ export default function Home() {
   }
 
   function handleProductClick(product: IProduct, cart: boolean) {
+    cartDispatch({ type: "ADD_ITEM", payload: product as any });
     if (cart) {
+      toast.success("Added to cart.");
       console.log("cart", product);
     } else push("/checkout");
   }
 
   return (
     <>
-      {" "}
       <Layout>
         <div className="">
           <div className=" w-full h-[calc(100vh-4rem)] relative overflow-hidden">
@@ -270,9 +311,9 @@ export default function Home() {
                   Products
                 </h1>
               </div>
-              <Carousel
+              <ProductCarousel
                 data={DiffDatas[selectedCategory] as any}
-                onClickButton={handleProductClick}
+                handelProductSelect={handleProductClick}
               />
             </div>
           </div>

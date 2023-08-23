@@ -6,9 +6,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/cartContext";
 
 const navigation = [
-  { name: "Shop", href: "#", current: true },
+  { name: "Shop", href: "/", current: true },
   { name: "On Sale", href: "/#on-sale", current: false },
   { name: "Location", href: "/#location-contact", current: false },
 ];
@@ -19,6 +20,7 @@ function classNames(...classes: any) {
 
 export function Header() {
   const { push } = useRouter();
+  const { cartState } = useCart();
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = () => {
@@ -102,6 +104,11 @@ export function Header() {
                     className="h-6 w-6 text-app-teal"
                     aria-hidden="true"
                   />
+                  {cartState?.length > 0 && (
+                    <div className=" absolute z-10 top-0 right-0 rounded-full text-app-teal font-bold">
+                      {cartState?.length}
+                    </div>
+                  )}
                 </button>
 
                 {/* Profile dropdown */}
