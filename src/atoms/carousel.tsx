@@ -5,17 +5,18 @@ import { Button } from "./button";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
-export interface Product {
+export interface IProduct {
   id?: number;
   label: string;
   variant?: { g: number; p: number }[];
 }
 
 interface CarouselProps {
-  data: Product[];
+  data: IProduct[];
+  onClickButton: (data: IProduct, cart: boolean) => void;
 }
 
-export const Carousel: React.FC<CarouselProps> = ({ data }) => {
+export const Carousel: React.FC<CarouselProps> = ({ data, onClickButton }) => {
   const sliderRef = React.useRef<Slider | null>(null);
   const [activeInd, setActiveInd] = useState<number>(0);
   const slidesToShow = Array.isArray(data) && data.length > 5 ? 5 : data.length;
@@ -82,7 +83,7 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
         return (
           <div
             key={product.id}
-            className={`flex px-1 md:px-2 transition duration-500 ${
+            className={`flex px-1 md:px-2 py-2 transition duration-500 ${
               ind !== activeInd ? getScale(ind) : ""
             }`}
           >
@@ -92,12 +93,12 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
                 alt={"img"}
                 className="w-full h-full mb-2 rounded-md object-cover"
               />
-              <div className=" px-1 md:px-4 flex flex-col gap-2">
-                <p className="text-white font-semibold text-lg">
+              <div className="flex flex-col gap-2">
+                <p className="text-white font-semibold md:text-lg text-2xl">
                   {product.label}
                 </p>
                 {product.variant && (
-                  <p className="text-white font-bold text-lg mb-2.5">
+                  <p className="text-white font-bold text-lg mb-2 leading-none">
                     ${product.variant[0]?.p ?? ""}{" "}
                     {product.variant[0]?.g ? ` /${product.variant[0]?.g}g` : ""}
                   </p>
@@ -109,9 +110,13 @@ export const Carousel: React.FC<CarouselProps> = ({ data }) => {
                       title="Buy Now"
                       className=" w-full"
                       paddingMargin="px-auto"
+                      onClick={() => onClickButton(product, false)}
                     />
                   </div>
-                  <div className=" cursor-pointer flex justify-center items-center px-2 relative">
+                  <div
+                    onClick={() => onClickButton(product, true)}
+                    className=" cursor-pointer flex justify-center items-center px-2 relative"
+                  >
                     <ShoppingCartIcon
                       className="h-8 w-8 text-app-teal"
                       aria-hidden="true"

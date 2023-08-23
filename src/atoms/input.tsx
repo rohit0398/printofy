@@ -35,8 +35,8 @@ export const InputField = <T extends Record<string, any>>({
       <input
         {...register(name, { ...rules, validate })}
         {...rest}
-        className={`block text-gray-800 min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray ${
-          error ? 'border-red-500' : 'border-light-gray'
+        className={`block text-white bg-app-dark-gray min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray-500 ${
+          error ? 'border-red-500' : 'border-gray-500'
         }`}
       />
       {error && (
