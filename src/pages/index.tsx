@@ -236,7 +236,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-
+          <div id="on-sale"></div>
           <div className=" flex flex-col mt-20">
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
               {Categories.map((val, key) => (
