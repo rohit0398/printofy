@@ -17,7 +17,7 @@ export default function Checkout() {
         <div className=" text-gradient text-4xl font-bold font-aboreto w-fit mx-auto mb-20">
           Cart Checkout
         </div>
-        <div className=" grid grid-cols-2 gap-8">
+        <div className=" grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className=" mx-8">
             <div className=" p-4 border border-white/40 rounded-lg">
               <div className=" flex gap-4 justify-between">
@@ -44,7 +44,7 @@ export default function Checkout() {
                 <span>You are buying</span>
               </div>
 
-              <div className=" flex items-center mt-20 gap-4">
+              <div className=" flex items-center mt-10 gap-4">
                 <img
                   src="assests/product.png"
                   className=" w-20 h-20 object-cover rounded"
