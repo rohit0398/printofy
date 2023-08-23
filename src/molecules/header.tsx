@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Shop", href: "#", current: true },
-  { name: "On Sale", href: "#", current: false },
+  { name: "On Sale", href: "/#on-sale", current: false },
   { name: "Location", href: "/#location-contact", current: false },
 ];
 
