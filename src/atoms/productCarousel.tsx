@@ -10,9 +10,9 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Modal } from "./modal";
 
 export interface IProduct {
-  id?: number;
+  _id?: number;
   label: string;
-  variant?: { g: number; p: number }[];
+  variants?: { g: number; p: number }[];
   count?: number;
 }
 
@@ -35,17 +35,17 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
   );
 
   function handleButtonClick(product: IProduct, cart: boolean) {
-    if (Array.isArray(product?.variant) && product?.variant.length > 1) {
+    if (Array.isArray(product?.variants) && product?.variants.length > 1) {
       setShowVariants(true);
       setDetails({ product, cart });
     } else handelProductSelect(product, cart);
   }
 
-  function handelVariantClick(variant: any) {
+  function handelVariantClick(variants: any) {
     handelProductSelect(
       {
         ...details?.product,
-        variant,
+        variants,
       },
       details?.cart
     );
@@ -116,14 +116,14 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
         {data.map((product, ind) => {
           return (
             <div
-              key={product.id ?? ind}
+              key={product._id ?? ind}
               className={`flex px-1 md:px-2 py-2 transition duration-500 ${
                 ind !== activeInd ? getScale(ind) : ""
               }`}
             >
               <div className={` mx-auto shadow-md rounded-md max-w-sm `}>
                 <img
-                  src={"assests/product.png"}
+                  src={"assets/product.png"}
                   alt={"img"}
                   className="w-full h-full mb-2 rounded-md object-cover"
                 />
@@ -131,11 +131,11 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
                   <p className="text-white font-semibold md:text-lg text-2xl">
                     {product.label}
                   </p>
-                  {product.variant && (
+                  {product.variants && (
                     <p className="text-white font-bold text-lg mb-2 leading-none">
-                      ${product.variant[0]?.p ?? ""}{" "}
-                      {product.variant[0]?.g
-                        ? ` /${product.variant[0]?.g}g`
+                      ${product.variants[0]?.p ?? ""}{" "}
+                      {product.variants[0]?.g
+                        ? ` /${product.variants[0]?.g}g`
                         : ""}
                     </p>
                   )}
@@ -181,14 +181,14 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
           <div className=" flex justify-between items-center">
             <div>
               <img
-                src={"assests/product.png"}
+                src={"assets/product.png"}
                 alt="img"
                 className=" w-16 h-16 object-cover"
               />
             </div>
             <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
-              {Array.isArray(details?.product?.variant) &&
-                details?.product.variant.map((variant, ind) => (
+              {Array.isArray(details?.product?.variants) &&
+                details?.product.variants.map((variant, ind) => (
                   <Button
                     onClick={() => handelVariantClick([variant])}
                     title={`$${variant?.p} /${variant?.g}g`}

@@ -68,7 +68,7 @@ export function Header() {
                 >
                   <img
                     className="h-8 w-auto"
-                    src="assests/logo.png"
+                    src="assets/logo.png"
                     alt="Your Company"
                   />
                 </div>

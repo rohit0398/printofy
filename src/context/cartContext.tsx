@@ -3,7 +3,8 @@ import React, { createContext, ReactNode, useContext, useReducer } from "react";
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: IProduct }
-  | { type: "REMOVE_ITEM"; payload: number };
+  | { type: "REMOVE_ITEM"; payload: number }
+  | { type: "RESET" };
 
 type CartState = IProduct[];
 
@@ -17,10 +18,10 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case "ADD_ITEM":
       const fountIndex = state.findIndex(
         (val) =>
-          val.id === action?.payload?.id &&
-          val?.variant &&
-          action?.payload?.variant &&
-          val?.variant[0]?.g === action?.payload?.variant[0]?.g
+          val._id === action?.payload?._id &&
+          val?.variants &&
+          action?.payload?.variants &&
+          val?.variants[0]?.g === action?.payload?.variants[0]?.g
       );
       if (fountIndex > -1) {
         const raw = [...state];
@@ -30,12 +31,14 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             ? (raw[fountIndex].count as number) + 1
             : 2,
         };
-        return raw
+        return raw;
       }
       return [...state, action.payload]; // Return updated state
     case "REMOVE_ITEM":
       // Add logic to handle removing an item from the cart
       return state; // Return updated state
+    case "RESET":
+      return [];
     default:
       return state;
   }
