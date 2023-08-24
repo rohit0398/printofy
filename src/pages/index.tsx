@@ -2,36 +2,16 @@ import { Layout } from "@/layouts";
 import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
 import { ProductCarousel, IProduct } from "@/atoms/productCarousel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useCart } from "@/context/cartContext";
+import api from "@/util/api";
+import { wentWrong } from "@/util/helper";
+import { Loader } from "@/atoms/loader";
 
 export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
-
-const Categories = [
-  {
-    label: "Magic Mushroom",
-    value: "mushroom",
-    icon: { light: "musroom-icon.png", dark: "musroom-dark-icon.png" },
-  },
-  {
-    label: "Edible",
-    value: "edible",
-    icon: { light: "ediable-icon.png", dark: "ediable-dark-icon.png" },
-  },
-  {
-    label: "Microdose",
-    value: "microdose",
-    icon: { light: "microdose-icon.png", dark: "microdose-dark-icon.png" },
-  },
-  {
-    label: "Merch",
-    value: "merch",
-    icon: { light: "store-icon.png", dark: "store-dark-icon.png" },
-  },
-];
 
 const DiffDatas = {
   mushroom: [
@@ -205,13 +185,46 @@ const DiffDatas = {
 export default function Home() {
   const { push } = useRouter();
   const { cartDispatch } = useCart();
+  const [selectedCategory, setSelectedCategory] =
+    useState<ICategories>("mushroom");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const { register } = useForm<FormData>({
     defaultValues: {},
   });
 
-  const [selectedCategory, setSelectedCategory] =
-    useState<ICategories>("mushroom");
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([getCategories(), getProducts()])
+      .then((values) => {
+        const categories = values[0]?.data;
+        const products = values[1]?.data;
+        setCategories(categories);
+        setProducts(products);
+      })
+      .catch(() => toast.error("Something went wrong! Please refresh page"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function getCategories() {
+    return api.get(`/category`);
+  }
+
+  async function getProducts() {
+    return api.get(`/product`);
+  }
+
+  function handleCategorySelect(_id: ICategories) {
+    setLoading(true);
+    setSelectedCategory(_id as ICategories);
+    api
+      .get(`/product?categoryId=${_id}`)
+      .then((res) => setProducts(res?.data))
+      .catch(() => toast.error(wentWrong))
+      .finally(() => setLoading(false));
+  }
 
   function scrollScreen() {
     // Scroll smoothly to the new position
@@ -240,12 +253,12 @@ export default function Home() {
               loop
               className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover"
             >
-              <source src="/assests/shroom-video4.mp4" type="video/mp4" />
+              <source src="/assets/shroom-video4.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
               <img
-                src="assests/shroom-logo.png"
+                src="assets/shroom-logo.png"
                 className=" max-w-[14rem] w-fit object-cover transition duration-500"
               />
             </div>
@@ -254,7 +267,7 @@ export default function Home() {
               <div className=" px-2 md:px-10 mt-[15%] md:-mt-20">
                 <div className=" hidden md:inline-block">
                   <img
-                    src="assests/shroom-logo-small.png"
+                    src="assets/shroom-logo-small.png"
                     className="max-w-[6rem] w-fit object-cover "
                   />
                 </div>
@@ -278,21 +291,22 @@ export default function Home() {
             </div>
           </div>
           <div id="on-sale"></div>
-          <div className=" flex flex-col mt-20">
+          <div className=" flex flex-col mt-20 relative">
+            {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
-              {Categories.map((val, key) => (
+              {categories.map((val, key) => (
                 <div
                   key={key}
-                  onClick={() => setSelectedCategory(val.value as ICategories)}
+                  onClick={() => handleCategorySelect(val._id)}
                   className={`${
-                    selectedCategory === val.value
+                    selectedCategory === val._id
                       ? "bg-app-purple/50 text-white"
                       : "bg-[#ffffff33] backdrop-blur-sm text-white"
                   } cursor-pointer w-44 md:w-64 py-2 px-1 md:p-4 flex gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
                   <div>
                     <img
-                      src={`assests/${val.icon.light}`}
+                      src={`${val?.image}`}
                       className=" md:w-8 md:h-8 w-6 h-6 object-fill"
                     />
                   </div>
@@ -306,13 +320,13 @@ export default function Home() {
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-                  {Categories.find((val) => val?.value === selectedCategory)
+                  {categories.find((val) => val?.value === selectedCategory)
                     ?.label ?? ""}{" "}
                   Products
                 </h1>
               </div>
               <ProductCarousel
-                data={DiffDatas[selectedCategory] as any}
+                data={products as any}
                 handelProductSelect={handleProductClick}
               />
             </div>
@@ -334,7 +348,7 @@ export default function Home() {
             </div>
             <div className=" flex justify-center md:order-last order-first">
               <img
-                src="/assests/what-is-mushroom.png"
+                src="/assets/what-is-mushroom.png"
                 alt="image"
                 className=" w-[50%] md:w-auto"
               />
@@ -347,7 +361,7 @@ export default function Home() {
           <div className=" w-full h-fit mt-2 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className=" flex justify-center order-last md:order-first">
               <img
-                src="/assests/whyshroomcity.png"
+                src="/assets/whyshroomcity.png"
                 alt="image"
                 className=" max-h-[50vh] md:max-h-[70vh]"
               />
@@ -406,14 +420,14 @@ export default function Home() {
               </div>
             </div>
             <div className=" flex justify-center">
-              <img src="/assests/safty.png" alt="image" />
+              <img src="/assets/safty.png" alt="image" />
             </div>
           </div>
 
           <div className=" w-full h-fit py-10 mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
             <div className=" flex justify-center order-last md:order-first py-5 md:py-0">
               <img
-                src="/assests/guidance.png"
+                src="/assets/guidance.png"
                 alt="image"
                 className=" max-h-[50vh] md:max-h-[70vh]"
               />
@@ -520,11 +534,11 @@ export default function Home() {
             <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
               <div className=" flex gap-4 md:self-end">
                 <img
-                  src="/assests/instagram.png"
+                  src="/assets/instagram.png"
                   alt="image"
                   className=" w-fit"
                 />
-                <img src="/assests/tiktok.png" alt="image" className=" w-fit" />
+                <img src="/assets/tiktok.png" alt="image" className=" w-fit" />
               </div>
               <div className=" text-base font-semibold md:self-end">
                 2023 Copyright Shroomcity.io | All reserved copyright

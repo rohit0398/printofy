@@ -3,14 +3,18 @@ import { InputField } from "@/atoms/input";
 import { Modal } from "@/atoms/modal";
 import { useCart } from "@/context/cartContext";
 import { Layout } from "@/layouts";
+import api from "@/util/api";
+import { wentWrong } from "@/util/helper";
 import {
   MapPinIcon,
   PlusCircleIcon,
   ShoppingCartIcon,
   RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface FormData {
   name: string;
@@ -25,9 +29,11 @@ interface FormData {
 }
 
 export default function Checkout() {
-  const { cartState } = useCart();
+  const { cartState, cartDispatch } = useCart();
   const [addAddress, setAddAddress] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { push } = useRouter();
   const { register, handleSubmit, formState, reset, watch } = useForm<FormData>(
     {
       defaultValues: {
@@ -43,21 +49,42 @@ export default function Checkout() {
       },
     }
   );
-
-  function handlePlaceOrder() {
-    setOrderSuccess(true);
-  }
-  const onSubmit = async (values: FormData) => {
-    setAddAddress(false);
-  };
   const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
   const grandTotal = useMemo(() => {
     return cartState.reduce(
       (total, item) =>
-        total + (item.variant ? item.variant[0]?.p : 1) * (item?.count ?? 1),
+        total + (item.variants ? item.variants[0]?.p : 1) * (item?.count ?? 1),
       0
     );
   }, [cartState]);
+
+  function handlePlaceOrder() {
+    if (!values?.name) return toast.error("Please add address.");
+
+    setLoading(true);
+    api
+      .post(`/order`, {
+        ...values,
+        total: grandTotal,
+        products: cartState.map((val) => {
+          return {
+            _id: val?._id,
+            variant: val?.variants && val?.variants[0]?.g,
+            count: val?.count,
+          };
+        }),
+      })
+      .then(() => {
+        setOrderSuccess(true);
+        toast.success("Order placed successfully");
+        cartDispatch({ type: "RESET" });
+      })
+      .catch(() => wentWrong)
+      .finally(() => setLoading(false));
+  }
+  const onSubmit = async () => {
+    setAddAddress(false);
+  };
 
   return (
     <Layout>
@@ -118,17 +145,17 @@ export default function Checkout() {
               {cartState.map((product, ind) => (
                 <div key={ind} className=" flex items-center mt-10 gap-4">
                   <img
-                    src="assests/product.png"
+                    src="assets/product.png"
                     className=" w-16 h-16 object-cover rounded"
                   />
                   <div className=" flex flex-col gap-2 font-semibold">
                     <span>{product?.label}</span>
                     <div className=" flex gap-2">
-                      {product?.variant && (
+                      {product?.variants && (
                         <span>
-                          ${product?.variant[0]?.p}
+                          ${product?.variants[0]?.p}
                           {" /"}
-                          {product?.variant[0]?.g}g
+                          {product?.variants[0]?.g}g
                         </span>
                       )}
                       <span>X</span> <span>{product?.count ?? 1}</span>
@@ -143,6 +170,7 @@ export default function Checkout() {
               </div>
 
               <Button
+                disabled={loading}
                 onClick={handlePlaceOrder}
                 title="Place Order"
                 className=" w-full"
@@ -217,16 +245,20 @@ export default function Checkout() {
                 <InputField
                   formState={formState}
                   register={register}
-                  name="country"
-                  label="Country"
+                  name="city"
+                  label="City"
+                  rules={{
+                    required: "This is a required field.",
+                  }}
                 />
               </div>
-              <div className=" grid grid-cols-2 gap-4">
+              {/* <div className=" grid grid-cols-2 gap-4">
+                
                 <InputField
                   formState={formState}
                   register={register}
-                  name="city"
-                  label="City"
+                  name="country"
+                  label="Country"
                 />
                 <InputField
                   formState={formState}
@@ -234,7 +266,7 @@ export default function Checkout() {
                   name="state"
                   label="State"
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-12 grid grid-cols-2 items-center justify-between gap-x-4">
@@ -243,12 +275,13 @@ export default function Checkout() {
             </div>
           </form>
         </Modal>
-        <Modal open={orderSuccess} setOpen={(bool) => setOrderSuccess(bool)}>
+        <Modal open={orderSuccess}>
           <div className=" flex flex-col gap-5 justify-between items-center p-10">
             <RocketLaunchIcon className=" w-32 h-32" />
             <div className=" font-aboreto text-2xl font-semibold">
               Order Placed Successfully
             </div>
+            <Button title="Go Home" onClick={() => push("/")} />
           </div>
         </Modal>
       </div>
