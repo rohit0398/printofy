@@ -189,6 +189,7 @@ export default function Home() {
     useState<ICategories>("mushroom");
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
+  const [onSale, setOnSale] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const { register } = useForm<FormData>({
@@ -197,12 +198,14 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([getCategories(), getProducts()])
+    Promise.all([getCategories(), getProducts(), getOnSaleProducts()])
       .then((values) => {
         const categories = values[0]?.data;
         const products = values[1]?.data;
+        const sale = values[2]?.data;
         setCategories(categories);
         setProducts(products);
+        setOnSale(sale);
       })
       .catch(() => toast.error("Something went wrong! Please refresh page"))
       .finally(() => setLoading(false));
@@ -214,6 +217,10 @@ export default function Home() {
 
   async function getProducts() {
     return api.get(`/product`);
+  }
+
+  async function getOnSaleProducts() {
+    return api.get(`/product?limit=10&sort=asc`);
   }
 
   function handleCategorySelect(_id: ICategories) {
@@ -259,29 +266,29 @@ export default function Home() {
             <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
               <img
                 src="assets/shroom-logo.png"
-                className=" max-w-[14rem] w-fit object-cover transition duration-500"
+                className=" max-w-[24rem] w-fit object-cover transition duration-500"
               />
             </div>
 
             <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
               <div className=" px-2 md:px-10 mt-[15%] md:-mt-20">
-                <div className=" hidden md:inline-block">
+                <div className=" hidden md:inline-block mb-4">
                   <img
                     src="assets/shroom-logo-small.png"
                     className="max-w-[6rem] w-fit object-cover "
                   />
                 </div>
-                <div className=" hidden md:block text-3xl text-white font-bold custom-purple-text-shadow">
-                  Welcome to
+                <div className="block text-3xl text-white font-medium">
+                  Welcome To
                 </div>
-                <div className=" md:text-7xl text-6xl text-app-purple font-semibold custom-white-text-shadow">
+                <div className=" md:text-5xl text-4xl text-app-teal font-semibold my-4">
                   SHROOM CITY
                 </div>
-                <div className=" md:text-3xl text-2xl text-white font-bold custom-purple-text-shadow">
+                <div className=" md:text-3xl text-2xl text-white font-medium">
                   Where The Magic Happens
                 </div>
               </div>
-              <div className=" flex flex-col justify-center items-center bottom-[10%] left-0 right-0 md:left-[20%] md:right-[-20%] absolute">
+              <div className=" mt-auto mb-20 md:mt-4 md:mb-0 px-2 md:px-10">
                 <Button
                   onClick={scrollScreen}
                   title="Explore More"
@@ -290,7 +297,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div id="on-sale"></div>
+
           <div className=" flex flex-col mt-20 relative">
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
@@ -300,7 +307,7 @@ export default function Home() {
                   onClick={() => handleCategorySelect(val._id)}
                   className={`${
                     selectedCategory === val._id
-                      ? "bg-app-purple/50 text-white"
+                      ? "bg-app-purple text-white"
                       : "bg-[#ffffff33] backdrop-blur-sm text-white"
                   } cursor-pointer w-44 md:w-64 py-2 px-1 md:p-4 flex gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
@@ -332,7 +339,23 @@ export default function Home() {
             </div>
           </div>
 
-          <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+          <div id="on-sale"></div>
+          <div className=" flex flex-col mt-20 relative">
+            <div className="container mx-auto p-6 md:p-2">
+              <div className=" my-10">
+                <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
+                  On Sale Products
+                </h1>
+              </div>
+              <ProductCarousel
+                data={onSale as any}
+                handelProductSelect={handleProductClick}
+              />
+            </div>
+          </div>
+
+          <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10 py-8 md:py-0 relative">
+            <div className=" absolute left-0 right-0 md:top-[10%] top-0 bottom-0 -z-10 bg-app-dark-gray"></div>
             <div className=" md:border-l-2 md:border-white border-none md:pl-8 pl-0">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
                 WHAT IS SHROOM CITY?

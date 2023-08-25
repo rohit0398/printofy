@@ -14,6 +14,7 @@ export interface IProduct {
   label: string;
   variants?: { g: number; p: number }[];
   count?: number;
+  image?: string
 }
 
 interface CarouselProps {
@@ -70,7 +71,7 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
     dots: true,
     infinite: true,
     speed: 500,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 3000,
     slidesToScroll: 1,
     swipeToSlide: true,
@@ -123,7 +124,7 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
             >
               <div className={` mx-auto shadow-md rounded-md max-w-sm `}>
                 <img
-                  src={"assets/product.png"}
+                  src={product?.image}
                   alt={"img"}
                   className="w-full h-full mb-2 rounded-md object-cover"
                 />
@@ -181,7 +182,7 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
           <div className=" flex justify-between items-center">
             <div>
               <img
-                src={"assets/product.png"}
+                src={details?.product?.image}
                 alt="img"
                 className=" w-16 h-16 object-cover"
               />

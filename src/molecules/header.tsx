@@ -81,8 +81,8 @@ export function Header() {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? "bg-app-purple/50 text-white"
-                          : "text-gray-300 hover:bg-app-purple/50 hover:text-white",
+                          ? "bg-app-purple text-white"
+                          : "text-gray-300 hover:bg-app-purple hover:text-white",
                         "rounded-md px-3 py-2 text-sm font-medium uppercase"
                       )}
                       aria-current={item.current ? "page" : undefined}
