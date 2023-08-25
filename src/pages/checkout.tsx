@@ -145,7 +145,7 @@ export default function Checkout() {
               {cartState.map((product, ind) => (
                 <div key={ind} className=" flex items-center mt-10 gap-4">
                   <img
-                    src="assets/product.png"
+                    src={product?.image}
                     className=" w-16 h-16 object-cover rounded"
                   />
                   <div className=" flex flex-col gap-2 font-semibold">
