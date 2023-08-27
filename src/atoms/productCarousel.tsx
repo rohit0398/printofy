@@ -68,7 +68,7 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
   }
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     autoplay: true,

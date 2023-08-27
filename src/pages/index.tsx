@@ -191,6 +191,7 @@ export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
   const [onSale, setOnSale] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [ageConfirmation, setAgeConfirmation] = useState(false);
 
   const { register } = useForm<FormData>({
     defaultValues: {},
@@ -209,6 +210,12 @@ export default function Home() {
       })
       .catch(() => toast.error("Something went wrong! Please refresh page"))
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const is19Plus = localStorage.getItem("19plus");
+    if (is19Plus === "true") setAgeConfirmation(false);
+    else setAgeConfirmation(true);
   }, []);
 
   async function getCategories() {
@@ -249,6 +256,11 @@ export default function Home() {
     } else push("/checkout");
   }
 
+  function hanldeAgeConfirmation() {
+    setAgeConfirmation(false);
+    localStorage.setItem("19plus", "true");
+  }
+
   return (
     <>
       <Layout>
@@ -266,29 +278,29 @@ export default function Home() {
             <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
               <img
                 src="assets/shroom-logo.png"
-                className=" max-w-[24rem] w-fit object-cover transition duration-500"
+                className=" max-w-[14rem] md:max-w-[24rem] w-fit object-cover transition duration-500"
               />
             </div>
 
             <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
-              <div className=" px-2 md:px-10 mt-[15%] md:-mt-20">
+              <div className=" px-2 md:px-4 mt-[10%] md:-mt-20">
                 <div className=" hidden md:inline-block mb-4">
                   <img
                     src="assets/shroom-logo-small.png"
                     className="max-w-[6rem] w-fit object-cover "
                   />
                 </div>
-                <div className="block text-3xl text-white font-medium">
+                <div className=" md:text-3xl text-2xl text-white font-medium">
                   Welcome To
                 </div>
-                <div className=" md:text-5xl text-4xl text-app-teal font-semibold my-4">
+                <div className=" md:text-5xl text-4xl text-app-teal font-semibold my-2 md:my-4">
                   SHROOM CITY
                 </div>
-                <div className=" md:text-3xl text-2xl text-white font-medium">
+                <div className=" md:text-3xl text-2xl text-white font-medium leading-tight">
                   Where The Magic Happens
                 </div>
               </div>
-              <div className=" mt-auto mb-20 md:mt-4 md:mb-0 px-2 md:px-10">
+              <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
                 <Button
                   onClick={scrollScreen}
                   title="Explore More"
@@ -570,6 +582,25 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {ageConfirmation && (
+        <div className=" fixed inset-0 z-50 flex flex-col justify-center items-center bg-black/80">
+          <div className=" text-4xl font-aboreto mb-10">
+            Please verify your age to enter.
+          </div>
+          <div className=" flex flex-col sm:flex-row gap-4">
+            <Button onClick={hanldeAgeConfirmation} title="I am 19 or older" />
+            <Button
+              onClick={() =>
+                toast.error(
+                  "Sorry, you must be 19 or over to enter this website."
+                )
+              }
+              variant="out-lined"
+              title="I am under 19"
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }

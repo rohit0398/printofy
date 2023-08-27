@@ -5,9 +5,9 @@ module.exports = {
     container: {
       center: true,
       padding: {
-        DEFAULT: ".1rem",
-        sm: "2rem",
-        lg: "4rem",
+        DEFAULT: "0rem",
+        sm: "0rem",
+        lg: "0rem",
         xl: "5rem",
         "2xl": "6rem",
       },
