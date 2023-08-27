@@ -127,19 +127,19 @@ export default function Checkout() {
                 Order Summary
               </div>
               <div className=" flex flex-col gap-2">
-                <div className=" flex sm:items-center justify-between sm:flex-row flex-col">
+                <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Order Number:</div>
                   <div className=" font-bold text-lg break-all">
                     {orderDetails?._id}
                   </div>
                 </div>
-                <div className=" flex sm:items-center justify-between sm:flex-row flex-col">
+                <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Total:</div>
                   <div className=" font-bold text-lg">
                     ${orderDetails?.total}
                   </div>
                 </div>
-                <div className=" flex sm:items-center justify-between sm:flex-row flex-col">
+                <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Payment Method:</div>
                   <div className=" font-bold text-lg">e-Transfer(Interac)</div>
                 </div>
@@ -156,19 +156,19 @@ export default function Checkout() {
                   <span className=" font-bold text-lg">{`NAME & ORDER NUMBER`}</span>{" "}
                   in the message box
                 </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center">
+                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
                   <span className=" font-bold text-lg">Name: </span>
                   {orderDetails?.eTransfer?.name}
                 </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center">
+                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
                   <span className=" font-bold text-lg">Email: </span>
                   {orderDetails?.eTransfer?.email}
                 </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center">
+                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
                   <span className=" font-bold text-lg">Order total: </span>$
                   {orderDetails?.total}
                 </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center">
+                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
                   <span className=" font-bold text-lg">Message: </span>
                   {orderDetails?._id}
                 </div>
@@ -181,11 +181,11 @@ export default function Checkout() {
                 <div className=" font-bold text-lg">
                   In case there is a securit question use this
                 </div>
-                <div className=" flex sm:items-center sm:flex-row flex-col ">
+                <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col ">
                   <span className=" font-bold text-lg">Question: </span>
                   {orderDetails?.eTransfer?.question}
                 </div>
-                <div className=" flex sm:items-center sm:flex-row flex-col">
+                <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col">
                   <span className=" font-bold text-lg">Password: </span>
                   {orderDetails?.eTransfer?.password}
                 </div>
