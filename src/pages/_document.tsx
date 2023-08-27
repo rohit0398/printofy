@@ -4,6 +4,14 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <meta name="application-name" content={"Shroom City"} />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/icons/apple-touch-icon.png"
+        />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
