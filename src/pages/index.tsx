@@ -584,7 +584,7 @@ export default function Home() {
       </div>
       {ageConfirmation && (
         <div className=" fixed inset-0 z-50 flex flex-col justify-center items-center bg-black/80">
-          <div className=" text-4xl font-aboreto mb-10">
+          <div className=" text-4xl font-aboreto mb-10 text-center">
             Please verify your age to enter.
           </div>
           <div className=" flex flex-col sm:flex-row gap-4">
