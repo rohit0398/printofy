@@ -35,6 +35,9 @@ export default function Checkout() {
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>({});
   const [loading, setLoading] = useState(false);
+  const [coupon, setCoupon] = useState<{ [key: string]: any }>();
+  const [couponName, setCouponName] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
   const { push } = useRouter();
   const { register, handleSubmit, formState, reset, watch } = useForm<FormData>(
     {
@@ -52,13 +55,21 @@ export default function Checkout() {
     }
   );
   const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
+
   const grandTotal = useMemo(() => {
-    return cartState.reduce(
+    let total = cartState.reduce(
       (total, item) =>
         total + (item.variants ? item.variants[0]?.p : 1) * (item?.count ?? 1),
       0
     );
-  }, [cartState]);
+    if (coupon?.title && (coupon?.minPrice < total || !coupon?.minPrice)) {
+      if (coupon?.type === "flat" && coupon?.discount)
+        return total - coupon.discount ?? 0;
+      else if (coupon?.type === "percent")
+        return total - total * (coupon.discount / 100);
+    }
+    return total;
+  }, [cartState, coupon?.title]);
 
   function handlePlaceOrder() {
     if (!values?.name) return toast.error("Please add address.");
@@ -99,6 +110,34 @@ export default function Checkout() {
         type: "COUNT_CHANGE",
         payload: { ind, count: count ? count - 1 : 0 },
       });
+  }
+
+  async function handleCouponApply() {
+    try {
+      if (!couponName) return toast.error("Please enter valid coupon");
+      setCouponLoading(true);
+      const coupon = await api.get(
+        `/coupon?limit=1&status=active&title=${couponName}`
+      );
+      setCouponLoading(false);
+      if (Array.isArray(coupon?.data) && coupon?.data.length) {
+        const details = coupon?.data[0];
+        if (details?.redeem < details?.limit || !details?.limit) {
+          if (details?.minPrice < grandTotal || !details?.minPrice) {
+            toast.success("Coupon applied successfully");
+            return setCoupon(details);
+          } else
+            toast.error(
+              `Minimum order price to apply this coupon should be ${details?.minPrice}`
+            );
+        } else toast.error("Coupon does not valid anymore!");
+      } else toast.error(`Coupon does't exists!`);
+      setCoupon({});
+    } catch (_ex) {
+      toast.error(wentWrong);
+      setCouponLoading(false);
+      setCoupon({});
+    }
   }
 
   const onSubmit = async () => {
@@ -285,9 +324,40 @@ export default function Checkout() {
                   </div>
                 ))}
 
-                <div className=" flex items-center justify-between py-2 px-4 my-5 gap-4 bg-gray-800 font-semibold rounded">
-                  <span>Grand Total</span>
-                  <span>${grandTotal}</span>
+                <div className="flex sm:flex-row flex-col items-center justify-between py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
+                  <span className=" font-aboreto text-sm">Have a coupon?</span>
+                  <div className=" flex justify-between gap-2">
+                    <input
+                      onChange={(e) => setCouponName(e.target?.value)}
+                      name="coupon"
+                      placeholder="Enter code"
+                      className={`block text-white bg-app-dark-gray min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray-500`}
+                    />
+                    <Button
+                      onClick={handleCouponApply}
+                      disabled={couponLoading}
+                      title="Apply"
+                    />
+                  </div>
+                </div>
+
+                <div className=" flex flex-col items-stretch justify-center py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
+                  {coupon?.title ? (
+                    <div className=" self-end bg-app-teal px-2 py-1 rounded text-sm">
+                      {`Coupon Applied  -`}
+                      <span>
+                        {coupon?.type === "flat" && "$"}
+                        {coupon?.discount}
+                        {coupon?.type === "percent" && "%"}
+                      </span>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <div className=" flex justify-between">
+                    <span className=" font-aboreto">Grand Total</span>
+                    <span>${grandTotal}</span>
+                  </div>
                 </div>
 
                 <Button
