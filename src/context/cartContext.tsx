@@ -21,7 +21,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           val._id === action?.payload?._id &&
           val?.variants &&
           action?.payload?.variants &&
-          val?.variants[0]?.g === action?.payload?.variants[0]?.g
+          val?.variants[0]?.u === action?.payload?.variants[0]?.u
       );
       if (fountIndex > -1) {
         const raw = [...state];
