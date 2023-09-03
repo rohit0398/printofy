@@ -1,6 +1,7 @@
 import { Button } from "@/atoms/button";
 import { InputField } from "@/atoms/input";
 import { Modal } from "@/atoms/modal";
+import MultiSelectSearch from "@/atoms/selectSearch";
 import { useCart } from "@/context/cartContext";
 import { Layout } from "@/layouts";
 import api from "@/util/api";
@@ -20,7 +21,7 @@ import { toast } from "react-toastify";
 interface FormData {
   name: string;
   address: string;
-  landmark: string;
+  type: { [key: string]: string };
   city: string;
   state: string;
   country: string;
@@ -39,12 +40,12 @@ export default function Checkout() {
   const [couponName, setCouponName] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const { push } = useRouter();
-  const { register, handleSubmit, formState, reset, watch } = useForm<FormData>(
-    {
+  const { register, handleSubmit, formState, control, watch } =
+    useForm<FormData>({
       defaultValues: {
         name: "",
         address: "",
-        landmark: "",
+        type: undefined,
         city: "",
         state: "",
         country: "",
@@ -52,8 +53,7 @@ export default function Checkout() {
         mobile: "",
         email: "",
       },
-    }
-  );
+    });
   const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
 
   const grandTotal = useMemo(() => {
@@ -72,19 +72,21 @@ export default function Checkout() {
   }, [cartState, coupon?.title]);
 
   function handlePlaceOrder() {
-    if (!values?.name) return toast.error("Please add address.");
+    const raw = { ...values };
+    if (!raw?.name) return toast.error("Please add address.");
     if (cartState.length === 0)
       return toast.error("Please add products to cart");
 
+    raw.type = (raw?.type?.value as any) ?? "";
     setLoading(true);
     api
       .post(`/order`, {
-        ...values,
+        ...raw,
         total: grandTotal,
         products: cartState.map((val) => {
           return {
             _id: val?._id,
-            variant: val?.variants && val?.variants[0]?.g,
+            variant: val?.variants && val?.variants[0]?.u,
             count: val?.count,
           };
         }),
@@ -253,12 +255,13 @@ export default function Checkout() {
                 {values?.name && (
                   <div className="flex flex-col gap-1 text-base pl-4 mt-10">
                     <div className=" font-extrabold">{values?.name}</div>
-                    <div>{values?.address}</div>
-                    <div>{values?.landmark}</div>
+                    <div>
+                      {values?.type?.value ?? ""} {values?.address}
+                    </div>
                     <div className=" flex gap-1">
-                      <span>{values?.city},</span>
-                      <span>{values?.state},</span>
-                      <span>{values?.country}</span>
+                      <span>{values?.city}</span>
+                      {/* <span>{values?.state},</span> */}
+                      {/* <span>{values?.country}</span> */}
                     </div>
                     <div>{values?.code}</div>
                     <div className=" flex flex-wrap gap-2">
@@ -300,7 +303,7 @@ export default function Checkout() {
                             <span>
                               ${product?.variants[0]?.p}
                               {" /"}
-                              {product?.variants[0]?.g}g
+                              {product?.variants[0]?.u}
                             </span>
                           )}
                           <span>X</span> <span>{product?.count ?? 1}</span>
@@ -312,6 +315,7 @@ export default function Checkout() {
                             }
                             className={`w-7 h-7 cursor-pointer`}
                           />
+                          <div>{product?.count ?? 1}</div>
                           <MinusCircleIcon
                             onClick={() =>
                               handleCountChange(false, ind, product?.count)
@@ -423,12 +427,28 @@ export default function Checkout() {
                   required: "This is a required field.",
                 }}
               />
-              <InputField
+
+              <MultiSelectSearch
+                options={[
+                  { label: "House", value: "house" },
+                  { label: "Apartment", value: "apartment" },
+                  { label: "Condo", value: "condo" },
+                ]}
+                control={control}
+                rules={{
+                  required: "This is a required field.",
+                }}
+                name="type"
+                label="Type"
+                formState={formState}
+              />
+
+              {/* <InputField
                 formState={formState}
                 register={register}
                 name="landmark"
                 label="Landmark"
-              />
+              /> */}
 
               <div className=" grid grid-cols-2 gap-4">
                 <InputField

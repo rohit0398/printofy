@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 const navigation = [
   { name: "Shop", href: "/", current: true },
-  { name: "On Sale", href: "/#on-sale", current: false },
+  { name: "Trending Sale", href: "/#trending-sale", current: false },
   { name: "Location", href: "/#location-contact", current: false },
 ];
 

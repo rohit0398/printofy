@@ -12,9 +12,9 @@ import { Modal } from "./modal";
 export interface IProduct {
   _id?: number;
   label: string;
-  variants?: { g: number; p: number }[];
+  variants?: { u: string; p: number }[];
   count?: number;
-  image?: string
+  image?: string;
 }
 
 interface CarouselProps {
@@ -135,8 +135,8 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
                   {product.variants && (
                     <p className="text-white font-bold text-lg mb-2 leading-none">
                       ${product.variants[0]?.p ?? ""}{" "}
-                      {product.variants[0]?.g
-                        ? ` /${product.variants[0]?.g}g`
+                      {product.variants[0]?.u
+                        ? ` /${product.variants[0]?.u}`
                         : ""}
                     </p>
                   )}
@@ -172,19 +172,19 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
       <Modal
         open={showVariants}
         setOpen={setShowVariants}
-        width="md:max-w-[38rem] w-full"
+        width="md:max-w-[40rem] w-full"
       >
-        <div className=" mb-5 mx-5">
+        <div className=" mb-5 sm:mx-5 mx-0">
           <div className="flex gap-2 text-base font-semibold text-start mb-10">
             <Square3Stack3DIcon className=" h-6 w-6 text-white" />
             Available variant for {details?.product?.label}
           </div>
-          <div className=" flex justify-between items-center">
+          <div className=" flex justify-between items-center sm:flex-row flex-col gap-4 sm:gap-2">
             <div>
               <img
                 src={details?.product?.image}
                 alt="img"
-                className=" w-16 h-16 object-cover"
+                className=" w-28 h-28 object-cover"
               />
             </div>
             <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
@@ -192,7 +192,7 @@ export const ProductCarousel: React.FC<CarouselProps> = ({
                 details?.product.variants.map((variant, ind) => (
                   <Button
                     onClick={() => handelVariantClick([variant])}
-                    title={`$${variant?.p} /${variant?.g}g`}
+                    title={`$${variant?.p} /${variant?.u}`}
                     paddingMargin="px-2 lg:px-4"
                     className=" flex items-center gap-2"
                     key={ind}

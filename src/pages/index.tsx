@@ -321,12 +321,12 @@ export default function Home() {
                     selectedCategory === val._id
                       ? "bg-app-purple text-white"
                       : "bg-[#ffffff33] backdrop-blur-sm text-white"
-                  } cursor-pointer w-44 md:w-64 py-2 px-1 md:p-4 flex gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
+                  } cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
                   <div>
                     <img
                       src={`${val?.image}`}
-                      className=" md:w-8 md:h-8 w-6 h-6 object-fill"
+                      className=" md:w-16 md:h-16 w-6 h-6 object-fill"
                     />
                   </div>
                   <div className=" md:text-base text-xs font-bold truncate">
@@ -341,7 +341,7 @@ export default function Home() {
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
                   {categories.find((val) => val?.value === selectedCategory)
                     ?.label ?? ""}{" "}
-                  Products
+                  Shop
                 </h1>
               </div>
               <ProductCarousel
@@ -351,12 +351,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="on-sale"></div>
+          <div id="trending-sale"></div>
           <div className=" flex flex-col mt-20 relative">
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-                  On Sale Products
+                  Trending Sale
                 </h1>
               </div>
               <ProductCarousel
@@ -569,11 +569,21 @@ export default function Home() {
             <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
               <div className=" flex gap-4 md:self-end">
                 <img
+                  onClick={() =>
+                    window.open("https://www.instagram.com/", "_blank")
+                  }
                   src="/assets/instagram.png"
                   alt="image"
-                  className=" w-fit"
+                  className=" w-10 h-10 cursor-pointer"
                 />
-                <img src="/assets/tiktok.png" alt="image" className=" w-fit" />
+                <img
+                  onClick={() =>
+                    window.open("https://www.tiktok.com/en/", "_blank")
+                  }
+                  src="/assets/tiktok.png"
+                  alt="image"
+                  className=" w-10 h-10 cursor-pointer"
+                />
               </div>
               <div className=" text-base font-semibold md:self-end">
                 2023 Copyright Shroomcity.io | All reserved copyright

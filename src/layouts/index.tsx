@@ -15,6 +15,7 @@ export function Layout({ children }: IProps) {
       <ToastContainer
         theme="dark"
         className={"mt-10"}
+        hideProgressBar={true}
       />
     </div>
   );
