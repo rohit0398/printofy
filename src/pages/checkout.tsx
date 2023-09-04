@@ -10,13 +10,13 @@ import {
   MapPinIcon,
   PlusCircleIcon,
   ShoppingCartIcon,
-  RocketLaunchIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface FormData {
   name: string;
@@ -70,6 +70,35 @@ export default function Checkout() {
     }
     return total;
   }, [cartState, coupon?.title]);
+
+  useEffect(() => {
+    let data =
+      '<mailing-scenario xmlns="http://www.canadapost.ca/ws/ship/rate-v4">\n<quote-type>counter</quote-type>\n<parcel-characteristics>\n<weight>1</weight>\n</parcel-characteristics>\n<origin-postal-code>K2B8J6</origin-postal-code>\n<destination>\n<domestic>\n<postal-code>J0E1X0</postal-code>\n</domestic>\n</destination>\n</mailing-scenario>';
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://ct.soa-gw.canadapost.ca/rs/ship/price",
+      headers: {
+        Accept: "application/vnd.cpc.ship.rate-v4+xml",
+        "Content-Type": "application/vnd.cpc.ship.rate-v4+xml",
+        "Accept-Language": "en-CA",
+        Authorization:
+          "Basic NmRhYzllNTI1YzViMDU4MDoxNjQ1MDRkMzM0MjIzZjg5NjEwN2M0",
+        Cookie: "OWSPRD002SHIP=ship_01278_s003ptom001",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function handlePlaceOrder() {
     const raw = { ...values };
