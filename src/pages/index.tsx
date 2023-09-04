@@ -570,23 +570,23 @@ export default function Home() {
               <div className=" flex gap-4 md:self-end">
                 <img
                   onClick={() =>
-                    window.open("https://www.instagram.com/", "_blank")
+                    window.open("https://instagram.com/shroomcityto?igshid=MzRlODBiNWFlZA==", "_blank")
                   }
                   src="/assets/instagram.png"
                   alt="image"
                   className=" w-10 h-10 cursor-pointer"
                 />
-                <img
+                {/* <img
                   onClick={() =>
                     window.open("https://www.tiktok.com/en/", "_blank")
                   }
                   src="/assets/tiktok.png"
                   alt="image"
                   className=" w-10 h-10 cursor-pointer"
-                />
+                /> */}
               </div>
               <div className=" text-base font-semibold md:self-end">
-                2023 Copyright Shroomcity.io | All reserved copyright
+                2023 Copyright Shroomcity.xyz | All reserved copyright
               </div>
             </div>
           </div>

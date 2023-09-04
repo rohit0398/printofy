@@ -13,10 +13,10 @@ import {
   MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { floor } from "lodash";
 
 interface FormData {
   name: string;
@@ -39,6 +39,11 @@ export default function Checkout() {
   const [coupon, setCoupon] = useState<{ [key: string]: any }>();
   const [couponName, setCouponName] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
+  const [deliveryDetails, setDeliveryDetails] = useState<{
+    type: string;
+    price: number;
+    date: string;
+  }>();
   const { push } = useRouter();
   const { register, handleSubmit, formState, control, watch } =
     useForm<FormData>({
@@ -54,7 +59,10 @@ export default function Checkout() {
         email: "",
       },
     });
-  const values = formState?.isSubmitSuccessful ? watch() : ({} as FormData);
+  const values =
+    formState?.isSubmitSuccessful && deliveryDetails?.price
+      ? watch()
+      : ({} as FormData);
 
   const grandTotal = useMemo(() => {
     let total = cartState.reduce(
@@ -62,43 +70,17 @@ export default function Checkout() {
         total + (item.variants ? item.variants[0]?.p : 1) * (item?.count ?? 1),
       0
     );
+
+    if (deliveryDetails?.price) total = total + deliveryDetails?.price;
     if (coupon?.title && (coupon?.minPrice < total || !coupon?.minPrice)) {
       if (coupon?.type === "flat" && coupon?.discount)
-        return total - coupon.discount ?? 0;
+        return floor(total - coupon.discount ?? 0);
       else if (coupon?.type === "percent")
-        return total - total * (coupon.discount / 100);
+        return floor(total - total * (coupon.discount / 100));
     }
-    return total;
-  }, [cartState, coupon?.title]);
 
-  useEffect(() => {
-    let data =
-      '<mailing-scenario xmlns="http://www.canadapost.ca/ws/ship/rate-v4">\n<quote-type>counter</quote-type>\n<parcel-characteristics>\n<weight>1</weight>\n</parcel-characteristics>\n<origin-postal-code>K2B8J6</origin-postal-code>\n<destination>\n<domestic>\n<postal-code>J0E1X0</postal-code>\n</domestic>\n</destination>\n</mailing-scenario>';
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://ct.soa-gw.canadapost.ca/rs/ship/price",
-      headers: {
-        Accept: "application/vnd.cpc.ship.rate-v4+xml",
-        "Content-Type": "application/vnd.cpc.ship.rate-v4+xml",
-        "Accept-Language": "en-CA",
-        Authorization:
-          "Basic NmRhYzllNTI1YzViMDU4MDoxNjQ1MDRkMzM0MjIzZjg5NjEwN2M0",
-        Cookie: "OWSPRD002SHIP=ship_01278_s003ptom001",
-      },
-      data: data,
-    };
-
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    return floor(total);
+  }, [cartState, coupon?.title, deliveryDetails]);
 
   function handlePlaceOrder() {
     const raw = { ...values };
@@ -112,6 +94,7 @@ export default function Checkout() {
       .post(`/order`, {
         ...raw,
         total: grandTotal,
+        delivery: deliveryDetails,
         products: cartState.map((val) => {
           return {
             _id: val?._id,
@@ -171,8 +154,16 @@ export default function Checkout() {
     }
   }
 
-  const onSubmit = async () => {
-    setAddAddress(false);
+  const onSubmit = async (values: any) => {
+    setLoading(true);
+    api
+      .get(`order/delivery?code=${values?.code}`)
+      .then((res) => {
+        setDeliveryDetails(res?.data);
+        setAddAddress(false);
+      })
+      .catch((ex) => toast.error('Please provide correct postal code'))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -249,7 +240,7 @@ export default function Checkout() {
                 </div>
 
                 <div className=" font-bold text-lg">
-                  In case there is a securit question use this
+                  In case there is a security question use this
                 </div>
                 <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col ">
                   <span className=" font-bold text-lg">Question: </span>
@@ -387,9 +378,27 @@ export default function Checkout() {
                   ) : (
                     <></>
                   )}
-                  <div className=" flex justify-between">
-                    <span className=" font-aboreto">Grand Total</span>
-                    <span>${grandTotal}</span>
+                  <div>
+                    {deliveryDetails?.price && (
+                      <div className=" flex justify-between">
+                        <span className=" text-xs opacity-70">
+                          Delivery Charges
+                        </span>
+                        <span>${deliveryDetails?.price}</span>
+                      </div>
+                    )}
+                    <div className=" flex justify-between">
+                      <span className=" font-aboreto">Grand Total</span>
+                      <span>${grandTotal}</span>
+                    </div>
+                    {deliveryDetails?.price && (
+                      <div className=" ml-auto w-fit">
+                        <div className=" text-xs">
+                          <span className=" text-xs">Arrival By </span>{" "}
+                          {deliveryDetails?.date}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -517,7 +526,7 @@ export default function Checkout() {
             </div>
 
             <div className="mt-12 grid grid-cols-2 items-center justify-between gap-x-4">
-              <Button type="submit" title="Save" />
+              <Button type="submit" title="Save" disabled={loading} />
               <Button onClick={() => setAddAddress(false)} title="Cancel" />
             </div>
           </form>
