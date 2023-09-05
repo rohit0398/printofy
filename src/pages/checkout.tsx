@@ -162,7 +162,10 @@ export default function Checkout() {
         setDeliveryDetails(res?.data);
         setAddAddress(false);
       })
-      .catch((ex) => toast.error('Please provide correct postal code'))
+      .catch((ex) => {
+        toast.error("Please provide correct postal code");
+        setDeliveryDetails({} as any);
+      })
       .finally(() => setLoading(false));
   };
 
