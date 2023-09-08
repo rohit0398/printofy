@@ -279,6 +279,7 @@ export default function Home() {
               <img
                 src="assets/shroom-logo.png"
                 className=" max-w-[14rem] md:max-w-[24rem] w-fit object-cover transition duration-500"
+                alt="imgage"
               />
             </div>
 
@@ -288,6 +289,7 @@ export default function Home() {
                   <img
                     src="assets/shroom-logo-small.png"
                     className="max-w-[6rem] w-fit object-cover "
+                    alt="imgage"
                   />
                 </div>
                 <div className=" md:text-3xl text-2xl text-white font-medium">
@@ -327,6 +329,7 @@ export default function Home() {
                     <img
                       src={`${val?.image}`}
                       className=" md:w-16 md:h-16 w-6 h-6 object-fill"
+                      alt="imgage"
                     />
                   </div>
                   <div className=" md:text-base text-xs font-bold truncate">
@@ -498,13 +501,15 @@ export default function Home() {
                 VISIT OUR STORE
               </div>
               <div className=" text-lg">
-                SHROOM CITY - TORONTO Meet The Best Shroom In The City
+                SHROOM CITY - TORONTO
+                <br />
+                <span>Meet The Best Shroom In The City</span>
                 <br />
                 <span className=" font-bold mt-6 text-app-teal">
                   Working hours:
                 </span>
                 <br />
-                Monday-Sunday 10:00 AM to 11:00 PM
+                Every Day 11:00 AM to 11:00 PM
                 <br />
                 <span className=" font-bold mt-6 text-app-teal"> Address:</span>
                 <br />
@@ -513,7 +518,7 @@ export default function Home() {
             </div>
             <div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11549.750493389418!2d-79.39735208209021!3d43.63906263764135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b352982d2a06b%3A0x479446ec6338be2c!2sHarbourfront%2C%20Toronto%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sin!4v1692473625178!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.9198164089735!2d-79.39970142374685!3d43.64983657110227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34db585c2261%3A0x669ee841e0f81137!2s188%20Spadina%20Ave.%2C%20Toronto%2C%20ON%20M5T%203A4%2C%20Canada!5e0!3m2!1sen!2sin!4v1694168994188!5m2!1sen!2sin"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
@@ -570,20 +575,23 @@ export default function Home() {
               <div className=" flex gap-4 md:self-end">
                 <img
                   onClick={() =>
-                    window.open("https://instagram.com/shroomcityto?igshid=MzRlODBiNWFlZA==", "_blank")
+                    window.open(
+                      "https://instagram.com/shroomcityto?igshid=MzRlODBiNWFlZA==",
+                      "_blank"
+                    )
                   }
                   src="/assets/instagram.png"
                   alt="image"
                   className=" w-10 h-10 cursor-pointer"
                 />
-                {/* <img
+                <img
                   onClick={() =>
-                    window.open("https://www.tiktok.com/en/", "_blank")
+                    window.open("https://www.tiktok.com/@shroomcityto?_t=8fTXITKXsAg&_r=1", "_blank")
                   }
                   src="/assets/tiktok.png"
                   alt="image"
                   className=" w-10 h-10 cursor-pointer"
-                /> */}
+                />
               </div>
               <div className=" text-base font-semibold md:self-end">
                 2023 Copyright Shroomcity.xyz | All reserved copyright

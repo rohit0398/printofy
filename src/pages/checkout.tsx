@@ -316,6 +316,7 @@ export default function Checkout() {
                     <img
                       src={product?.image}
                       className=" w-16 h-16 object-cover rounded"
+                      alt="imgage"
                     />
                     <div className=" flex flex-col grow gap-2 font-semibold">
                       <span>{product?.label}</span>
