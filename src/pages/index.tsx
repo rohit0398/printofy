@@ -13,175 +13,6 @@ import { Loader } from "@/atoms/loader";
 
 export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 
-const DiffDatas = {
-  mushroom: [
-    {
-      id: 1,
-      label: "Albino Zilla",
-      value: "albinoZilla",
-      variant: [
-        { g: 7, p: 60 },
-        { g: 14, p: 100 },
-        { g: 28, p: 190 },
-      ],
-    },
-    {
-      id: 2,
-      label: "Gold Members",
-      value: "goldMembers",
-      variant: [
-        { g: 7, p: 60 },
-        { g: 14, p: 100 },
-        { g: 28, p: 190 },
-      ],
-    },
-    {
-      id: 3,
-      label: "Gold Teachers",
-      value: "goldTeachers",
-      variant: [
-        { g: 7, p: 60 },
-        { g: 14, p: 100 },
-        { g: 28, p: 190 },
-      ],
-    },
-    {
-      id: 4,
-      label: "Penis Envy",
-      value: "penisEnvy",
-      variant: [
-        { g: 7, p: 60 },
-        { g: 14, p: 100 },
-        { g: 28, p: 190 },
-      ],
-    },
-    {
-      id: 5,
-      label: "Trinity",
-      value: "trinity",
-      variant: [
-        { g: 7, p: 60 },
-        { g: 14, p: 100 },
-        { g: 28, p: 190 },
-      ],
-    },
-    {
-      id: 6,
-      label: "Albino Teachers",
-      value: "albinoTeachers",
-      variant: [
-        { g: 7, p: 70 },
-        { g: 14, p: 120 },
-        { g: 28, p: 230 },
-      ],
-    },
-    {
-      id: 7,
-      label: "Mckilla Gorilla",
-      value: "mckillaGorilla",
-      variant: [
-        { g: 7, p: 70 },
-        { g: 14, p: 120 },
-        { g: 28, p: 230 },
-      ],
-    },
-    {
-      id: 8,
-      label: "Tidal Wave",
-      value: "tidalWave",
-      variant: [
-        { g: 7, p: 70 },
-        { g: 14, p: 120 },
-        { g: 28, p: 230 },
-      ],
-    },
-  ],
-  edible: [
-    {
-      id: 9,
-      label: "Dark Chocolate Bar",
-      value: "darkChocolate",
-      variant: [{ g: 4, p: 50 }],
-    },
-    {
-      id: 10,
-      label: "Milk Chocolate Bar",
-      value: "milkChocolate",
-      variant: [{ g: 4, p: 50 }],
-    },
-    {
-      id: 11,
-      label: "Peach Gummies",
-      value: "peachGummies",
-      variant: [{ g: 3, p: 45 }],
-    },
-    {
-      id: 12,
-      label: "Blueberry Gummies",
-      value: "blueGummies",
-      variant: [{ g: 3, p: 45 }],
-    },
-    {
-      id: 13,
-      label: "Chocolate Gummies",
-      value: "chocolateGummies",
-      variant: [{ g: 3, p: 45 }],
-    },
-  ],
-  microdose: [
-    {
-      id: 14,
-      label: "Focus capsules",
-      value: "focusCapsules",
-      variant: [{ p: 25 }],
-    },
-    {
-      id: 15,
-      label: "Anxiety capsule",
-      value: "anxietyCapsules",
-      variant: [{ p: 25 }],
-    },
-  ],
-  merch: [
-    {
-      id: 16,
-      label: "Hoodie",
-      value: "hoodie",
-      variant: [{ p: 120 }],
-    },
-    {
-      id: 17,
-      label: "Short",
-      value: "short",
-      variant: [{ p: 95 }],
-    },
-    {
-      id: 18,
-      label: "Tee",
-      value: "tee",
-      variant: [{ p: 55 }],
-    },
-    {
-      id: 19,
-      label: "Cap",
-      value: "cap",
-      variant: [{ p: 45 }],
-    },
-    {
-      id: 20,
-      label: "Bucket",
-      value: "bucket",
-      variant: [{ p: 35 }],
-    },
-    {
-      id: 21,
-      label: "Tote",
-      value: "tote",
-      variant: [{ p: 25 }],
-    },
-  ],
-};
-
 export default function Home() {
   const { push } = useRouter();
   const { cartDispatch } = useCart();
@@ -197,6 +28,7 @@ export default function Home() {
     defaultValues: {},
   });
 
+  // Loading the categories, products, and on sale products
   useEffect(() => {
     setLoading(true);
     Promise.all([getCategories(), getProducts(), getOnSaleProducts()])
@@ -241,7 +73,6 @@ export default function Home() {
   }
 
   function scrollScreen() {
-    // Scroll smoothly to the new position
     window.scrollTo({
       top: window.innerHeight * 0.9,
       behavior: "smooth",
@@ -312,6 +143,8 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Categories and Shop section */}
+
           <div className=" flex flex-col mt-20 relative">
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
@@ -354,6 +187,8 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Trending Sale section */}
+
           <div id="trending-sale"></div>
           <div className=" flex flex-col mt-20 relative">
             <div className="container mx-auto p-6 md:p-2">
@@ -368,6 +203,8 @@ export default function Home() {
               />
             </div>
           </div>
+
+          {/* Why Shroom city section */}
 
           <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10 py-8 md:py-0 relative">
             <div className=" absolute left-0 right-0 md:top-[10%] top-0 bottom-0 -z-10 bg-app-dark-gray"></div>
@@ -492,6 +329,8 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Visit Store section */}
+
           <div
             id="location-contact"
             className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10"
@@ -530,6 +369,8 @@ export default function Home() {
           </div>
         </div>
       </Layout>
+
+      {/* Contact Us Footer section */}
       <div className="bg-app-dark-gray">
         <div className=" container">
           <div className=" w-full h-fit mt-16 md:mt-0 py-10 md:py-20  justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
@@ -586,7 +427,10 @@ export default function Home() {
                 />
                 <img
                   onClick={() =>
-                    window.open("https://www.tiktok.com/@shroomcityto?_t=8fTXITKXsAg&_r=1", "_blank")
+                    window.open(
+                      "https://www.tiktok.com/@shroomcityto?_t=8fTXITKXsAg&_r=1",
+                      "_blank"
+                    )
                   }
                   src="/assets/tiktok.png"
                   alt="image"
@@ -600,6 +444,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Age confirmation section */}
       {ageConfirmation && (
         <div className=" fixed inset-0 z-50 flex flex-col justify-center items-center bg-black/80">
           <div className=" text-4xl font-aboreto mb-10 text-center">
