@@ -136,7 +136,7 @@ export default function Home() {
               <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
                 <Button
                   onClick={scrollScreen}
-                  title="Explore More"
+                  title="Shop Online"
                   className=""
                 />
               </div>
@@ -145,7 +145,7 @@ export default function Home() {
 
           {/* Categories and Shop section */}
 
-          <div className=" flex flex-col mt-20 relative">
+          <div id="categories" className=" flex flex-col mt-20 relative">
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
               {categories.map((val, key) => (
@@ -189,7 +189,7 @@ export default function Home() {
 
           {/* Trending Sale section */}
 
-          <div id="trending-sale"></div>
+          <div></div>
           <div className=" flex flex-col mt-20 relative">
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
@@ -206,7 +206,10 @@ export default function Home() {
 
           {/* Why Shroom city section */}
 
-          <div className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10 py-8 md:py-0 relative">
+          <div
+            id="about-us"
+            className=" w-full md:h-[90vh] h-fit mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10 py-8 md:py-0 relative"
+          >
             <div className=" absolute left-0 right-0 md:top-[10%] top-0 bottom-0 -z-10 bg-app-dark-gray"></div>
             <div className=" md:border-l-2 md:border-white border-none md:pl-8 pl-0">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
@@ -243,7 +246,7 @@ export default function Home() {
             </div>
             <div className="pr-4">
               <div className=" text-app-teal text-xl mb-3">
-                1: Exceptional Quality
+                1. Exceptional Quality
               </div>
               <div className=" text-lg">
                 At Shroom City, we are dedicated to providing you with mushrooms
@@ -332,7 +335,7 @@ export default function Home() {
           {/* Visit Store section */}
 
           <div
-            id="location-contact"
+            id="shop-location"
             className="w-full h-fit md:h-[90vh] mt-16 md:mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-4 px-4 md:px-10"
           >
             <div className=" flex flex-col gap-4 md:border-l-2 md:border-white md:pl-8">
@@ -371,7 +374,7 @@ export default function Home() {
       </Layout>
 
       {/* Contact Us Footer section */}
-      <div className="bg-app-dark-gray">
+      <div id="contact-us" className="bg-app-dark-gray">
         <div className=" container">
           <div className=" w-full h-fit mt-16 md:mt-0 py-10 md:py-20  justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 md:px-10 px-4">
             <div className=" flex flex-col text-white">

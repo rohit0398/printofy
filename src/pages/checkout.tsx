@@ -45,7 +45,7 @@ export default function Checkout() {
     date: string;
   }>();
   const { push } = useRouter();
-  const { register, handleSubmit, formState, control, watch } =
+  const { register, handleSubmit, formState, control, watch, setValue } =
     useForm<FormData>({
       defaultValues: {
         name: "",
@@ -126,6 +126,33 @@ export default function Checkout() {
       });
   }
 
+  const formatPhoneNumber = (phoneNumber: string) => {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    if (cleaned.length > 6)
+      setValue(
+        "mobile",
+        `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+          6,
+          10
+        )}`
+      );
+    else if (cleaned.length > 3)
+      setValue("mobile", `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 10)}`);
+
+    return phoneNumber;
+  };
+
+  const formatCode = (code: string) => {
+    let cleaned = code.replace(/[^a-zA-Z0-9]/g, "");
+    cleaned = cleaned?.toUpperCase();
+    console.log("clea", cleaned);
+    if (cleaned.length > 3)
+      setValue("code", `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)}`);
+
+    code = code?.toUpperCase();
+    return code;
+  };
+
   async function handleCouponApply() {
     try {
       if (!couponName) return toast.error("Please enter valid coupon");
@@ -155,18 +182,22 @@ export default function Checkout() {
   }
 
   const onSubmit = async (values: any) => {
-    setLoading(true);
-    api
-      .get(`order/delivery?code=${values?.code}`)
-      .then((res) => {
-        setDeliveryDetails(res?.data);
-        setAddAddress(false);
-      })
-      .catch((ex) => {
-        toast.error("Please provide correct postal code");
-        setDeliveryDetails({} as any);
-      })
-      .finally(() => setLoading(false));
+    try {
+      setLoading(true);
+      let code = values?.code;
+      code = code.replaceAll(/[^a-zA-Z0-9]/g, "");
+      // code  = code?.replaceAll(' ', '')?.replaceAll('-', '')?.toUpperCase()
+      // code  = code?.replaceAll('-', '')
+      code = code.toUpperCase();
+      const res = await api.get(`order/delivery?code=${code}`);
+      setDeliveryDetails(res?.data);
+      setAddAddress(false);
+      setLoading(false);
+    } catch (_err: any) {
+      toast.error("Please provide correct postal code");
+      setDeliveryDetails({} as any);
+      setLoading(false);
+    }
   };
 
   return (
@@ -352,66 +383,82 @@ export default function Checkout() {
                   </div>
                 ))}
 
-                <div className="flex sm:flex-row flex-col items-center justify-between py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
-                  <span className=" font-aboreto text-sm">Have a coupon?</span>
-                  <div className=" flex justify-between gap-2">
-                    <input
-                      onChange={(e) => setCouponName(e.target?.value)}
-                      name="coupon"
-                      placeholder="Enter code"
-                      className={`block text-white bg-app-dark-gray min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray-500`}
-                    />
-                    <Button
-                      onClick={handleCouponApply}
-                      disabled={couponLoading}
-                      title="Apply"
-                    />
-                  </div>
-                </div>
-
-                <div className=" flex flex-col items-stretch justify-center py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
-                  {coupon?.title ? (
-                    <div className=" self-end bg-app-teal px-2 py-1 rounded text-sm">
-                      {`Coupon Applied  -`}
-                      <span>
-                        {coupon?.type === "flat" && "$"}
-                        {coupon?.discount}
-                        {coupon?.type === "percent" && "%"}
+                {Array.isArray(cartState) && cartState.length ? (
+                  <>
+                    <div className="flex sm:flex-row flex-col items-center justify-between py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
+                      <span className=" font-aboreto text-sm">
+                        Have a coupon?
                       </span>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                  <div>
-                    {deliveryDetails?.price && (
-                      <div className=" flex justify-between">
-                        <span className=" text-xs opacity-70">
-                          Delivery Charges
-                        </span>
-                        <span>${deliveryDetails?.price}</span>
+                      <div className=" flex justify-between gap-2">
+                        <input
+                          onChange={(e) => setCouponName(e.target?.value)}
+                          name="coupon"
+                          placeholder="Enter code"
+                          className={`block text-white bg-app-dark-gray min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray-500`}
+                        />
+                        <Button
+                          onClick={handleCouponApply}
+                          disabled={couponLoading}
+                          title="Apply"
+                        />
                       </div>
-                    )}
-                    <div className=" flex justify-between">
-                      <span className=" font-aboreto">Grand Total</span>
-                      <span>${grandTotal}</span>
                     </div>
-                    {deliveryDetails?.price && (
-                      <div className=" ml-auto w-fit">
-                        <div className=" text-xs">
-                          <span className=" text-xs">Arrival By </span>{" "}
-                          {deliveryDetails?.date}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
 
-                <Button
-                  disabled={loading}
-                  onClick={handlePlaceOrder}
-                  title="Place Order"
-                  className=" w-full"
-                />
+                    <div className=" flex flex-col items-stretch justify-center py-2 sm:px-4 px-0 my-5 gap-4 bg-app-dark-gray font-semibold rounded">
+                      {coupon?.title ? (
+                        <div className=" self-end bg-app-teal px-2 py-1 rounded text-sm">
+                          {`Coupon Applied  -`}
+                          <span>
+                            {coupon?.type === "flat" && "$"}
+                            {coupon?.discount}
+                            {coupon?.type === "percent" && "%"}
+                          </span>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                      <div>
+                        {deliveryDetails?.price && (
+                          <div className=" flex justify-between">
+                            <span className=" text-xs opacity-70">
+                              Delivery Charges
+                            </span>
+                            <span>${deliveryDetails?.price}</span>
+                          </div>
+                        )}
+                        <div className=" flex justify-between">
+                          <span className=" font-aboreto">Grand Total</span>
+                          <span>${grandTotal}</span>
+                        </div>
+                        {deliveryDetails?.price && (
+                          <div className=" ml-auto w-fit">
+                            <div className=" text-xs">
+                              <span className=" text-xs">Arrival By </span>{" "}
+                              {deliveryDetails?.date}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <Button
+                      disabled={loading}
+                      onClick={handlePlaceOrder}
+                      title="Place Order"
+                      className=" w-full"
+                    />
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-5 mt-10 items-center">
+                    <div className=" font-aboreto">Cart is empty</div>
+                    <Button
+                      disabled={loading}
+                      onClick={() => push("/#categories")}
+                      title="Shop"
+                      className=" w-fit"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -455,16 +502,21 @@ export default function Checkout() {
                 register={register}
                 name="mobile"
                 label="Mobile"
-                type="number"
+                placeholder="(XXX) XXX-XXXX"
+                onChange={(e) => formatPhoneNumber(e.target.value)}
                 rules={{
                   required: "This is a required field.",
                 }}
+                validate={(value: any) =>
+                  value.replace(/\D/g, "").length === 10 ||
+                  "Invalid phone number. Please enter a 10-digit number."
+                }
               />
               <InputField
                 formState={formState}
                 register={register}
                 name="address"
-                label="Address"
+                label="Street Address"
                 rules={{
                   required: "This is a required field.",
                 }}
@@ -498,6 +550,8 @@ export default function Checkout() {
                   register={register}
                   name="code"
                   label="Postal Code"
+                  placeholder="Ex: T2E 6W1"
+                  onChange={(e) => formatCode(e.target.value)}
                   rules={{
                     required: "This is a required field.",
                   }}
