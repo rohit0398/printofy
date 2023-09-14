@@ -12,8 +12,8 @@ import { Loader } from "@/atoms/loader";
 type FormData = {
   firstname: String;
   lastname: String;
-  email: String;
-  number: String;
+  mail: String;
+  mobile: String;
   message: String;
   _id?: string;
 };
@@ -24,7 +24,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [ageConfirmation, setAgeConfirmation] = useState(false);
 
-  const { register, handleSubmit, formState, reset } = useForm<FormData>({
+  const { register, handleSubmit, formState, reset, setValue } = useForm<FormData>({
     defaultValues: {},
   });
 
@@ -59,6 +59,22 @@ export default function Home() {
     localStorage.setItem("19plus", "true");
   }
 
+  const formatPhoneNumber = (phoneNumber: string) => {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    if (cleaned.length > 6)
+      setValue(
+        "mobile",
+        `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+          6,
+          10
+        )}`
+      );
+    else if (cleaned.length > 3)
+      setValue("mobile", `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 10)}`);
+
+    return phoneNumber;
+  };
+
   const onSubmit = async (values: FormData) => {
     try {
       setLoading(true);
@@ -68,8 +84,8 @@ export default function Home() {
       reset({
         firstname: "",
         lastname: "",
-        email: "",
-        number: "",
+        mail: "",
+        mobile: "",
         message: "",
       });
     } catch (_err: any) {
@@ -141,8 +157,7 @@ export default function Home() {
                 <div
                   key={key}
                   onClick={() => handleCategorySelect(val._id)}
-                  className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"
-                  } cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
+                  className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"} cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
                   <div>
                     <img
@@ -391,7 +406,7 @@ export default function Home() {
                   <InputField
                     register={register}
                     formState={formState}
-                    name="email"
+                    name="mail"
                     placeholder="Email"
                     type={"email"}
                     rules={{
@@ -401,18 +416,20 @@ export default function Home() {
                   <InputField
                     register={register}
                     formState={formState}
-                    name="number"
-                    placeholder="Number"
-                    type={"number"}
+                    name="mobile"
+                    placeholder="(XXX) XXX-XXXX"
+                    onChange={(e) => formatPhoneNumber(e.target.value)}
                     rules={{
                       required: "This is a required field.",
                     }}
+                    validate={(value: any) =>
+                      value.replace(/\D/g, "").length === 10 ||
+                      "Invalid phone number. Please enter a 10-digit number."
+                    }
                   />
                   <div className=" col-span-2">
                     <textarea
-                      {...register("message" as any, {
-                        required: "This is a required field.",
-                      })}
+                      {...register("message" as any)}
                       rows={3}
                       placeholder="Message"
                       className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray bg-app-dark-gray"
