@@ -6,34 +6,35 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import api from "@/util/api";
-import { ICategories } from "@/util/helper";
+import { ICategories, wentWrong } from "@/util/helper";
 import { Loader } from "@/atoms/loader";
+
+type FormData = {
+  firstname: String;
+  lastname: String;
+  email: String;
+  number: String;
+  message: String;
+  _id?: string;
+};
 
 export default function Home() {
   const { push } = useRouter();
-  const [selectedCategory, setSelectedCategory] =
-    useState<ICategories>("mushroom");
   const [categories, setCategories] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
-  const [onSale, setOnSale] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [ageConfirmation, setAgeConfirmation] = useState(false);
 
-  const { register } = useForm<FormData>({
+  const { register, handleSubmit, formState, reset } = useForm<FormData>({
     defaultValues: {},
   });
 
   // Loading the categories, products, and on sale products
   useEffect(() => {
     setLoading(true);
-    Promise.all([getCategories(), getProducts(), getOnSaleProducts()])
+    Promise.all([getCategories()])
       .then((values) => {
         const categories = values[0]?.data;
-        const products = values[1]?.data;
-        const sale = values[2]?.data;
         setCategories(categories);
-        setProducts(products);
-        setOnSale(sale);
       })
       .catch(() => toast.error("Something went wrong! Please refresh page"))
       .finally(() => setLoading(false));
@@ -46,15 +47,7 @@ export default function Home() {
   }, []);
 
   async function getCategories() {
-    return api.get(`/category?limit=4&sort=asc`);
-  }
-
-  async function getProducts() {
-    return api.get(`/product`);
-  }
-
-  async function getOnSaleProducts() {
-    return api.get(`/product?limit=10&sort=asc`);
+    return api.get(`/category?limit=4&sort=asc&status=true`);
   }
 
   function handleCategorySelect(_id: ICategories) {
@@ -65,6 +58,25 @@ export default function Home() {
     setAgeConfirmation(false);
     localStorage.setItem("19plus", "true");
   }
+
+  const onSubmit = async (values: FormData) => {
+    try {
+      setLoading(true);
+      await api.post("/contact-us", values);
+      toast.success("Details saved! Our team will contact you soon");
+      setLoading(false);
+      reset({
+        firstname: "",
+        lastname: "",
+        email: "",
+        number: "",
+        message: "",
+      });
+    } catch (_err: any) {
+      toast.error(wentWrong);
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -109,7 +121,7 @@ export default function Home() {
               </div>
               <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
                 <Button
-                  onClick={()=> push('/products')}
+                  onClick={() => push("/products")}
                   title="Shop Online"
                   className=""
                 />
@@ -129,10 +141,7 @@ export default function Home() {
                 <div
                   key={key}
                   onClick={() => handleCategorySelect(val._id)}
-                  className={`${
-                    selectedCategory === val._id
-                      ? "bg-app-purple text-white"
-                      : "bg-[#ffffff33] backdrop-blur-sm text-white"
+                  className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"
                   } cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
                 >
                   <div>
@@ -359,38 +368,66 @@ export default function Home() {
               <div className=" text-xl font-semibold mt-6 mb-2">
                 QUESTIONS & INQUIRIES
               </div>
-              <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField
-                  register={register}
-                  name="First Name"
-                  placeholder="First Name"
-                />
-                <InputField
-                  register={register}
-                  name="Last Name"
-                  placeholder="Last Name"
-                />
-                <InputField
-                  register={register}
-                  name="Email"
-                  placeholder="Email"
-                />
-                <InputField
-                  register={register}
-                  name="Number"
-                  placeholder="Number"
-                />
-                <div className=" col-span-2">
-                  <textarea
-                    rows={3}
-                    placeholder="Message"
-                    className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray bg-app-dark-gray"
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <InputField
+                    register={register}
+                    formState={formState}
+                    name="firstname"
+                    placeholder="First Name"
+                    rules={{
+                      required: "This is a required field.",
+                    }}
+                  />
+                  <InputField
+                    register={register}
+                    formState={formState}
+                    name="lastname"
+                    placeholder="Last Name"
+                    rules={{
+                      required: "This is a required field.",
+                    }}
+                  />
+                  <InputField
+                    register={register}
+                    formState={formState}
+                    name="email"
+                    placeholder="Email"
+                    type={"email"}
+                    rules={{
+                      required: "This is a required field.",
+                    }}
+                  />
+                  <InputField
+                    register={register}
+                    formState={formState}
+                    name="number"
+                    placeholder="Number"
+                    type={"number"}
+                    rules={{
+                      required: "This is a required field.",
+                    }}
+                  />
+                  <div className=" col-span-2">
+                    <textarea
+                      {...register("message" as any, {
+                        required: "This is a required field.",
+                      })}
+                      rows={3}
+                      placeholder="Message"
+                      className=" block min-h-[2.375rem] w-full rounded border px-1.5 py-1 shadow-sm focus:border-gray bg-app-dark-gray"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    type="submit"
+                    title="Submit"
+                    className=" mt-6"
+                    disabled={loading}
                   />
                 </div>
-              </div>
-              <div>
-                <Button type="submit" title="Submit" className=" mt-6" />
-              </div>
+              </form>
             </div>
             <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
               <div className=" flex gap-4 md:self-end">

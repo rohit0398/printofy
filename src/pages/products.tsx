@@ -1,26 +1,21 @@
-import { Button } from "@/atoms/button";
 import { Loader } from "@/atoms/loader";
 import { Product } from "@/atoms/product";
-import { IProduct, ProductCarousel } from "@/atoms/productCarousel";
-import { useCart } from "@/context/cartContext";
+import { IProduct } from "@/atoms/productCarousel";
 import { Layout } from "@/layouts";
 import api from "@/util/api";
 import { ICategories, wentWrong } from "@/util/helper";
-import { PlusCircleIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Products() {
   const { push, query } = useRouter();
-  const { cartDispatch } = useCart();
 
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [onSale, setOnSale] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] =
-    useState<ICategories>("mushroom");
+
 
   // Loading the categories, products, and on sale products
   useEffect(() => {
@@ -39,8 +34,8 @@ export default function Products() {
   useEffect(() => {
     let url = "";
     if (query?.categoryId) {
-      url = `/product?categoryId=${query?.categoryId}`;
-    } else url = `/product`;
+      url = `/product?categoryId=${query?.categoryId}&categoryStatus=true`;
+    } else url = `/product?categoryStatus=true`;
     setLoading(true);
     api
       .get(url)
@@ -50,27 +45,15 @@ export default function Products() {
   }, [query]);
 
   async function getCategories() {
-    return api.get(`/category`);
-  }
-
-  async function getProducts() {
-    return api.get(`/product`);
+    return api.get(`/category?status=true`);
   }
 
   async function getOnSaleProducts() {
     return api.get(`/product?limit=10&sort=asc`);
   }
 
-  function handleProductClick(product: IProduct, cart: boolean) {
-    cartDispatch({ type: "ADD_ITEM", payload: product as any });
-    if (cart) {
-      toast.success("Added to cart.");
-      console.log("cart", product);
-    } else push("/checkout");
-  }
-
   function handleCategorySelect(_id: ICategories) {
-    push(`/products?categoryId=${_id}`);
+    push(`/products?categoryId=${_id}&status=true`);
   }
 
   return (
@@ -107,7 +90,7 @@ export default function Products() {
               ))}
             </div>
 
-            <div className="container mt-20 mx-auto p-6 md:p-2">
+            <div className="container mt-10 sm:mt-20 mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
                   {categories.find((val) => val?._id === query?.categoryId)
@@ -127,7 +110,7 @@ export default function Products() {
           {/* Trending Sale section */}
 
           <div></div>
-          <div className=" flex flex-col mt-20 relative">
+          <div className=" flex flex-col mt-10 sm:mt-20 relative">
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
