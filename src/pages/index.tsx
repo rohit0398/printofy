@@ -1,19 +1,16 @@
 import { Layout } from "@/layouts";
 import { InputField } from "@/atoms/input";
 import { Button } from "@/atoms/button";
-import { ProductCarousel, IProduct } from "@/atoms/productCarousel";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useCart } from "@/context/cartContext";
 import api from "@/util/api";
-import { ICategories, wentWrong } from "@/util/helper";
+import { ICategories } from "@/util/helper";
 import { Loader } from "@/atoms/loader";
 
 export default function Home() {
   const { push } = useRouter();
-  const { cartDispatch } = useCart();
   const [selectedCategory, setSelectedCategory] =
     useState<ICategories>("mushroom");
   const [categories, setCategories] = useState<any[]>([]);
@@ -64,21 +61,6 @@ export default function Home() {
     push(`/products?categoryId=${_id}`);
   }
 
-  function scrollScreen() {
-    window.scrollTo({
-      top: window.innerHeight * 0.9,
-      behavior: "smooth",
-    });
-  }
-
-  function handleProductClick(product: IProduct, cart: boolean) {
-    cartDispatch({ type: "ADD_ITEM", payload: product as any });
-    if (cart) {
-      toast.success("Added to cart.");
-      console.log("cart", product);
-    } else push("/checkout");
-  }
-
   function hanldeAgeConfirmation() {
     setAgeConfirmation(false);
     localStorage.setItem("19plus", "true");
@@ -110,7 +92,7 @@ export default function Home() {
               <div className=" px-2 md:px-4 mt-[10%] md:-mt-20">
                 <div className=" hidden md:inline-block mb-4">
                   <img
-                    src="assets/shroom-logo-small.png"
+                    src="/assets/what-is-mushroom.png"
                     className="max-w-[6rem] w-fit object-cover "
                     alt="imgage"
                   />
@@ -127,7 +109,7 @@ export default function Home() {
               </div>
               <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
                 <Button
-                  onClick={scrollScreen}
+                  onClick={()=> push('/products')}
                   title="Shop Online"
                   className=""
                 />
@@ -136,8 +118,8 @@ export default function Home() {
           </div>
 
           {/* Categories and Shop section */}
-
-          <div id="categories" className=" flex flex-col my-20 relative">
+          <div id="categories"></div>
+          <div className=" flex flex-col my-20 relative">
             <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
               Categories
             </h1>
