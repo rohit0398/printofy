@@ -110,7 +110,9 @@ export default function Products() {
               <div className=" grid grid-cols-5 gap-x-8 gap-y-16">
                 {Array.isArray(products) &&
                   products.length &&
-                  products.map((val: IProduct) => <Product product={val} />)}
+                  products.map((val: IProduct, ind: number) => (
+                    <Product product={val} key={ind} />
+                  ))}
               </div>
             </div>
           </div>
@@ -128,7 +130,9 @@ export default function Products() {
               <div className=" grid grid-cols-5 gap-x-8 gap-y-16">
                 {Array.isArray(onSale) &&
                   onSale.length &&
-                  onSale.map((val: IProduct) => <Product product={val} />)}
+                  onSale.map((val: IProduct, ind: number) => (
+                    <Product product={val} key={ind} />
+                  ))}
               </div>
             </div>
           </div>
