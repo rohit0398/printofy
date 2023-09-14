@@ -8,10 +8,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useCart } from "@/context/cartContext";
 import api from "@/util/api";
-import { wentWrong } from "@/util/helper";
+import { ICategories, wentWrong } from "@/util/helper";
 import { Loader } from "@/atoms/loader";
-
-export type ICategories = "mushroom" | "edible" | "microdose" | "merch";
 
 export default function Home() {
   const { push } = useRouter();
@@ -51,7 +49,7 @@ export default function Home() {
   }, []);
 
   async function getCategories() {
-    return api.get(`/category`);
+    return api.get(`/category?limit=4&sort=asc`);
   }
 
   async function getProducts() {
@@ -145,7 +143,10 @@ export default function Home() {
 
           {/* Categories and Shop section */}
 
-          <div id="categories" className=" flex flex-col mt-20 relative">
+          <div id="categories" className=" flex flex-col my-20 relative">
+            <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
+              Categories
+            </h1>
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
               {categories.map((val, key) => (
@@ -172,7 +173,7 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="container mx-auto p-6 md:p-2">
+            {/* <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
                   {categories.find((val) => val?.value === selectedCategory)
@@ -184,12 +185,12 @@ export default function Home() {
                 data={products as any}
                 handelProductSelect={handleProductClick}
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Trending Sale section */}
 
-          <div></div>
+          {/* <div></div>
           <div className=" flex flex-col mt-20 relative">
             <div className="container mx-auto p-6 md:p-2">
               <div className=" my-10">
@@ -202,7 +203,7 @@ export default function Home() {
                 handelProductSelect={handleProductClick}
               />
             </div>
-          </div>
+          </div> */}
 
           {/* Why Shroom city section */}
 
