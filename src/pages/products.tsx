@@ -77,7 +77,10 @@ export default function Products() {
     <Layout>
       <div className=" py-20">
         <div className="mb-20 text-center">
-          <div id="categories" className=" flex flex-col mt-4 sm:mt-20 relative">
+          <div
+            id="categories"
+            className=" flex flex-col mt-4 sm:mt-20 relative"
+          >
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
               {categories.map((val, key) => (
@@ -107,9 +110,8 @@ export default function Products() {
             <div className="container mt-20 mx-auto p-6 md:p-2">
               <div className=" my-10">
                 <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-                  {categories.find((val) => val?.value === query?.categoryId)
-                    ?.label ?? ""}{" "}
-                  Shop
+                  {categories.find((val) => val?._id === query?.categoryId)
+                    ?.label ?? "Shop"}
                 </h1>
               </div>
               <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-8 gap-y-16">
