@@ -5,14 +5,14 @@ import { IProduct, ProductCarousel } from "@/atoms/productCarousel";
 import { useCart } from "@/context/cartContext";
 import { Layout } from "@/layouts";
 import api from "@/util/api";
-import { ICategories } from "@/util/helper";
+import { ICategories, wentWrong } from "@/util/helper";
 import { PlusCircleIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Products() {
-  const { push } = useRouter();
+  const { push, query } = useRouter();
   const { cartDispatch } = useCart();
 
   const [loading, setLoading] = useState(false);
@@ -25,18 +25,29 @@ export default function Products() {
   // Loading the categories, products, and on sale products
   useEffect(() => {
     setLoading(true);
-    Promise.all([getCategories(), getProducts(), getOnSaleProducts()])
+    Promise.all([getCategories(), getOnSaleProducts()])
       .then((values) => {
         const categories = values[0]?.data;
-        const products = values[1]?.data;
-        const sale = values[2]?.data;
+        const sale = values[1]?.data;
         setCategories(categories);
-        setProducts(products);
         setOnSale(sale);
       })
       .catch(() => toast.error("Something went wrong! Please refresh page"))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    let url = "";
+    if (query?.categoryId) {
+      url = `/product?categoryId=${query?.categoryId}`;
+    } else url = `/product`;
+    setLoading(true);
+    api
+      .get(url)
+      .then((res) => setProducts(res?.data))
+      .catch(() => toast.error(wentWrong))
+      .finally(() => setLoading(false));
+  }, [query]);
 
   async function getCategories() {
     return api.get(`/category`);
@@ -59,13 +70,7 @@ export default function Products() {
   }
 
   function handleCategorySelect(_id: ICategories) {
-    setLoading(true);
-    setSelectedCategory(_id as ICategories);
-    // api
-    //   .get(`/product?categoryId=${_id}`)
-    //   .then((res) => setProducts(res?.data))
-    //   .catch(() => toast.error(wentWrong))
-    //   .finally(() => setLoading(false));
+    push(`/products?categoryId=${_id}`);
   }
 
   return (

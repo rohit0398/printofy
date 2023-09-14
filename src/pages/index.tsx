@@ -61,13 +61,7 @@ export default function Home() {
   }
 
   function handleCategorySelect(_id: ICategories) {
-    setLoading(true);
-    setSelectedCategory(_id as ICategories);
-    api
-      .get(`/product?categoryId=${_id}`)
-      .then((res) => setProducts(res?.data))
-      .catch(() => toast.error(wentWrong))
-      .finally(() => setLoading(false));
+    push(`/products?categoryId=${_id}`);
   }
 
   function scrollScreen() {
