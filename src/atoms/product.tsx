@@ -32,6 +32,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
   const [buyNow, setBuyNow] = useState(false);
   const [mouseEnter, setMouseEnter] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showFullSize, setFullSize] = useState(false);
 
   function handleCardClick() {
     console.log("card clicked");
@@ -163,11 +164,12 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
             Details for {product?.label}
           </div>
           <div className=" flex sm:flex-row flex-col gap-4 sm:gap-8">
-            <div>
+            <div className=" shrink-0">
               <img
-                src={selectedIndex === 1 ? product?.image2: product?.image}
+                onClick={()=> setFullSize(true)}
+                src={selectedIndex === 1 ? product?.image2 : product?.image}
                 alt="img"
-                className=" w-64 h-64 object-cover"
+                className=" w-64 h-64 object-cover cursor-pointer"
               />
               {product?.image2 && (
                 <div className=" flex gap-4 mt-6">
@@ -198,7 +200,9 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               <div className="text-white font-semibold text-lg md:text-2xl">
                 {product?.label}
               </div>
-              <div className=" text-white font-normal text-base md:text-lg">{product?.description}</div>
+              <div className=" text-white font-normal text-base md:text-lg">
+                {product?.description}
+              </div>
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
                 {Array.isArray(product?.variants) &&
                   product.variants.map((variant, ind) => (
@@ -206,7 +210,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                       onClick={() => handelVariantClick([variant])}
                       title={`$${variant?.p} /${variant?.u}`}
                       paddingMargin="px-2 lg:px-4"
-                      className=" flex items-center gap-2"
+                      className=" flex items-center gap-2 justify-center sm:justify-start"
                       key={ind}
                     >
                       <PlusCircleIcon className=" h-6 w-6" />
@@ -216,6 +220,16 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
             </div>
           </div>
         </div>
+        <Modal
+          open={showFullSize}
+          setOpen={setFullSize}
+          width="w-screen h-screen"
+        >
+          <img
+            src={selectedIndex === 1 ? product?.image2 : product?.image}
+            className="w-full h-full object-contain"
+          />
+        </Modal>
       </Modal>
     </>
   );

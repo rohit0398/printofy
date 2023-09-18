@@ -51,7 +51,7 @@ export function Modal({
                 {setOpen && (
                   <div
                     onClick={() => setOpen(false)}
-                    className=" absolute right-0 top-0 z-10 cursor-pointer p-5"
+                    className=" absolute right-0 top-0 z-10 cursor-pointer p-5 bg-black/90 flex justify-center items-center rounded-full"
                   >
                     <XMarkIcon className=" h-6 w-6 " />
                   </div>
