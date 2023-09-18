@@ -1,10 +1,17 @@
 import { IProduct } from "@/atoms/productCarousel";
-import React, { createContext, ReactNode, useContext, useReducer } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: IProduct }
   | { type: "COUNT_CHANGE"; payload: { ind: number; count: number } }
-  | { type: "RESET" };
+  | { type: "RESET" }
+  | { type: "LOAD_CART"; payload: IProduct[] };
 
 type CartState = IProduct[];
 
@@ -44,6 +51,8 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           count: count,
         };
       return raw;
+    case "LOAD_CART":
+      return [...state, ...action.payload];
     case "RESET":
       return [];
     default:
@@ -55,6 +64,25 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [cartState, cartDispatch] = useReducer(cartReducer, []);
+
+  // Save cart to local storage whenever it changes
+  useEffect(() => {
+    if (cartState && Array.isArray(cartState) && cartState.length)
+      localStorage.setItem("cart", JSON.stringify(cartState));
+  }, [cartState]);
+
+  // Load cart from local storage when the component mounts
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    console.log("heloo cart", savedCart);
+    if (savedCart) {
+      cartDispatch({ type: "RESET" }); // Clear the cart
+      const parsedCart = JSON.parse(savedCart);
+      console.log("spapr", parsedCart);
+      if (parsedCart && Array.isArray(parsedCart))
+        cartDispatch({ type: "LOAD_CART", payload: parsedCart as IProduct[] }); // Add items from local storage to the cart
+    }
+  }, []);
 
   return (
     <CartContext.Provider value={{ cartState, cartDispatch }}>

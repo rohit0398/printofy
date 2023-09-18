@@ -3,4 +3,3 @@ export function positiveDifference(a: number, b: number): number {
 }
 
 export const wentWrong = `Something went wrong! Please try again`;
-export type ICategories = "mushroom" | "edible" | "microdose" | "merch";

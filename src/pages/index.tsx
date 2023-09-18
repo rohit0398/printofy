@@ -6,8 +6,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import api from "@/util/api";
-import { ICategories, wentWrong } from "@/util/helper";
+import { wentWrong } from "@/util/helper";
 import { Loader } from "@/atoms/loader";
+import { useCategories } from "@/context/categoriesContext";
 
 type FormData = {
   firstname: String;
@@ -20,25 +21,14 @@ type FormData = {
 
 export default function Home() {
   const { push } = useRouter();
-  const [categories, setCategories] = useState<any[]>([]);
+  const { categories } = useCategories();
   const [loading, setLoading] = useState(false);
   const [ageConfirmation, setAgeConfirmation] = useState(false);
 
-  const { register, handleSubmit, formState, reset, setValue } = useForm<FormData>({
-    defaultValues: {},
-  });
-
-  // Loading the categories, products, and on sale products
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([getCategories()])
-      .then((values) => {
-        const categories = values[0]?.data;
-        setCategories(categories);
-      })
-      .catch(() => toast.error("Something went wrong! Please refresh page"))
-      .finally(() => setLoading(false));
-  }, []);
+  const { register, handleSubmit, formState, reset, setValue } =
+    useForm<FormData>({
+      defaultValues: {},
+    });
 
   useEffect(() => {
     const is19Plus = localStorage.getItem("19plus");
@@ -46,11 +36,7 @@ export default function Home() {
     else setAgeConfirmation(true);
   }, []);
 
-  async function getCategories() {
-    return api.get(`/category?limit=4&sort=asc&status=true`);
-  }
-
-  function handleCategorySelect(_id: ICategories) {
+  function handleCategorySelect(_id: string) {
     push(`/products?categoryId=${_id}`);
   }
 
@@ -153,24 +139,25 @@ export default function Home() {
             </h1>
             {loading && <Loader />}
             <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
-              {categories.map((val, key) => (
-                <div
-                  key={key}
-                  onClick={() => handleCategorySelect(val._id)}
-                  className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"} cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
-                >
-                  <div>
-                    <img
-                      src={`${val?.image}`}
-                      className=" md:w-16 md:h-16 w-6 h-6 object-fill"
-                      alt="imgage"
-                    />
+              {Array.isArray(categories) &&
+                categories.map((val, key) => (
+                  <div
+                    key={key}
+                    onClick={() => handleCategorySelect(val._id)}
+                    className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"} cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
+                  >
+                    <div>
+                      <img
+                        src={`${val?.image}`}
+                        className=" md:w-16 md:h-16 w-6 h-6 object-fill"
+                        alt="imgage"
+                      />
+                    </div>
+                    <div className=" md:text-base text-xs font-bold truncate">
+                      {val?.label}
+                    </div>
                   </div>
-                  <div className=" md:text-base text-xs font-bold truncate">
-                    {val?.label}
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             {/* <div className="container mx-auto p-6 md:p-2">

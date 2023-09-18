@@ -8,6 +8,8 @@ import {
 import { useRouter } from "next/router";
 import { useCart } from "@/context/cartContext";
 import { toast } from "react-toastify";
+import { DropDown } from "@/atoms/dropdown";
+import { useCategories } from "@/context/categoriesContext";
 
 const navigation = [
   { name: "Categories", href: "/#categories" },
@@ -23,6 +25,7 @@ function classNames(...classes: any) {
 export function Header() {
   const { push, query } = useRouter();
   const { cartState } = useCart();
+  const { categories } = useCategories();
   const [scrolled, setScrolled] = useState(false);
   const [selected, setSelected] = useState("");
 
@@ -82,22 +85,30 @@ export function Header() {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setSelected(item.href)}
-                      className={classNames(
-                        selected === item.href
-                          ? "bg-app-purple text-white"
-                          : "text-gray-300 hover:bg-app-purple hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium uppercase"
-                      )}
-                      aria-current={selected ? "page" : undefined}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                  {navigation.map((item) => {
+                    return item.name === "Categories" ? (
+                      <DropDown
+                        title="Categories"
+                        data={categories}
+                        handleClick={(val) => push(`/products?categoryId=${val?._id}`)}
+                      />
+                    ) : (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setSelected(item.href)}
+                        className={classNames(
+                          selected === item.href
+                            ? "bg-app-purple text-white"
+                            : "text-gray-300 hover:bg-app-purple hover:text-white",
+                          "rounded-md px-3 py-2 text-sm font-medium uppercase"
+                        )}
+                        aria-current={selected ? "page" : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">

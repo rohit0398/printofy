@@ -10,7 +10,7 @@ type IProps = {
   variant?: IButtonVarient;
   fontSize?: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e?: any) => void;
   rounded?: string;
   type?: any;
   children?: ReactNode;

@@ -1,30 +1,27 @@
 import { Loader } from "@/atoms/loader";
 import { Product } from "@/atoms/product";
 import { IProduct } from "@/atoms/productCarousel";
+import { useCategories } from "@/context/categoriesContext";
 import { Layout } from "@/layouts";
 import api from "@/util/api";
-import { ICategories, wentWrong } from "@/util/helper";
+import { wentWrong } from "@/util/helper";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Products() {
   const { push, query } = useRouter();
-
+  const { categories } = useCategories();
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [onSale, setOnSale] = useState<any[]>([]);
-
 
   // Loading the categories, products, and on sale products
   useEffect(() => {
     setLoading(true);
-    Promise.all([getCategories(), getOnSaleProducts()])
+    Promise.all([getOnSaleProducts()])
       .then((values) => {
-        const categories = values[0]?.data;
-        const sale = values[1]?.data;
-        setCategories(categories);
+        const sale = values[0]?.data;
         setOnSale(sale);
       })
       .catch(() => toast.error("Something went wrong! Please refresh page"))
@@ -44,15 +41,11 @@ export default function Products() {
       .finally(() => setLoading(false));
   }, [query]);
 
-  async function getCategories() {
-    return api.get(`/category?status=true`);
-  }
-
   async function getOnSaleProducts() {
     return api.get(`/product?limit=10&sort=asc`);
   }
 
-  function handleCategorySelect(_id: ICategories) {
+  function handleCategorySelect(_id: string) {
     push(`/products?categoryId=${_id}&status=true`);
   }
 
