@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import api from "@/util/api";
 import { wentWrong } from "@/util/helper";
-import { Loader } from "@/atoms/loader";
-import { useCategories } from "@/context/categoriesContext";
 
 type FormData = {
   firstname: String;
@@ -21,7 +19,6 @@ type FormData = {
 
 export default function Home() {
   const { push } = useRouter();
-  const { categories } = useCategories();
   const [loading, setLoading] = useState(false);
   const [ageConfirmation, setAgeConfirmation] = useState(false);
 
@@ -35,10 +32,6 @@ export default function Home() {
     if (is19Plus === "true") setAgeConfirmation(false);
     else setAgeConfirmation(true);
   }, []);
-
-  function handleCategorySelect(_id: string) {
-    push(`/products?categoryId=${_id}`);
-  }
 
   function hanldeAgeConfirmation() {
     setAgeConfirmation(false);
@@ -130,69 +123,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Categories and Shop section */}
-          <div id="categories"></div>
-          <div className=" flex flex-col my-20 relative">
-            <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-              Categories
-            </h1>
-            {loading && <Loader />}
-            <div className="flex gap-2 flex-wrap mx-auto justify-center font-aboreto">
-              {Array.isArray(categories) &&
-                categories.map((val, key) => (
-                  <div
-                    key={key}
-                    onClick={() => handleCategorySelect(val._id)}
-                    className={`${"bg-[#ffffff33] backdrop-blur-sm text-white"} cursor-pointer w-44 md:w-52 py-2 px-1 md:p-4 flex flex-col gap-2 md:gap-4 items-center justify-center rounded-md hover:ring ring-app-purple transition duration-500`}
-                  >
-                    <div>
-                      <img
-                        src={`${val?.image}`}
-                        className=" md:w-16 md:h-16 w-6 h-6 object-fill"
-                        alt="imgage"
-                      />
-                    </div>
-                    <div className=" md:text-base text-xs font-bold truncate">
-                      {val?.label}
-                    </div>
-                  </div>
-                ))}
-            </div>
-
-            {/* <div className="container mx-auto p-6 md:p-2">
-              <div className=" my-10">
-                <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-                  {categories.find((val) => val?.value === selectedCategory)
-                    ?.label ?? ""}{" "}
-                  Shop
-                </h1>
-              </div>
-              <ProductCarousel
-                data={products as any}
-                handelProductSelect={handleProductClick}
-              />
-            </div> */}
-          </div>
-
-          {/* Trending Sale section */}
-
-          {/* <div></div>
-          <div className=" flex flex-col mt-20 relative">
-            <div className="container mx-auto p-6 md:p-2">
-              <div className=" my-10">
-                <h1 className="text-3xl mb-4 text-center font-semibold font-aboreto">
-                  Trending Sale
-                </h1>
-              </div>
-              <ProductCarousel
-                data={onSale as any}
-                handelProductSelect={handleProductClick}
-              />
-            </div>
-          </div> */}
-
-          {/* Why Shroom city section */}
 
           <div
             id="about-us"

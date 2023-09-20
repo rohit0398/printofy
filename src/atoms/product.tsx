@@ -80,7 +80,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                 onMouseEnter={() => setMouseEnter((prev) => !prev)}
                 src={product?.image2}
                 alt={"img"}
-                className={`absolute left-0 right-0 z-10 bg-transparent w-full mb-2 rounded-md object-contain transition-all duration-500 ${
+                className={`absolute left-0 right-0 z-10 bg-transparent aspect-[1050/1600] mb-2 rounded-md object-cover transition-all duration-500 ${
                   mouseEnter ? "opacity-100 blur-none" : "opacity-0 blur-sm"
                 }`}
               />
@@ -94,7 +94,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               }
               src={product?.image}
               alt={"img"}
-              className={`w-full mb-2 rounded-md object-contain transition-all duration-500 ${
+              className={`aspect-[1050/1600] mb-2 rounded-md object-cover transition-all duration-500 ${
                 mouseEnter ? "opacity-0 blur-sm" : "opacity-100 blur-none"
               }`}
             />
@@ -169,7 +169,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                 onClick={()=> setFullSize(true)}
                 src={selectedIndex === 1 ? product?.image2 : product?.image}
                 alt="img"
-                className=" w-64 h-64 object-cover cursor-pointer"
+                className=" max-w-[16rem] aspect-[1050/1600] object-cover cursor-pointer"
               />
               {product?.image2 && (
                 <div className=" flex gap-4 mt-6">
@@ -177,7 +177,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                     onClick={() => setSelectedIndex(0)}
                     src={product?.image}
                     alt="img"
-                    className={`cursor-pointer w-16 h-16 object-cover ${
+                    className={`cursor-pointer max-w-[4rem] aspect-[1050/1600] object-cover ${
                       selectedIndex === 0
                         ? "border-4 border-app-purple rounded"
                         : ""
@@ -187,7 +187,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                     onClick={() => setSelectedIndex(1)}
                     src={product?.image2}
                     alt="img"
-                    className={`cursor-pointer w-16 h-16 object-cover ${
+                    className={`cursor-pointer max-w-[4rem] aspect-[1050/1600] object-cover ${
                       selectedIndex === 1
                         ? "border-4 border-app-purple rounded"
                         : ""
