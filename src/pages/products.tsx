@@ -42,7 +42,7 @@ export default function Products() {
   }, [query]);
 
   async function getOnSaleProducts() {
-    return api.get(`/product?limit=10&sort=asc`);
+    return api.get(`/product?limit=10&sort=asc&categoryStatus=true`);
   }
 
   function handleCategorySelect(_id: string) {

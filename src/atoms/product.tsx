@@ -200,7 +200,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               <div className="text-white font-semibold text-lg md:text-2xl">
                 {product?.label}
               </div>
-              <div className=" text-white font-normal text-base md:text-lg">
+              <div className=" text-white font-normal text-base md:text-lg whitespace-pre-line">
                 {product?.description}
               </div>
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
