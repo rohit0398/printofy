@@ -18,6 +18,7 @@ export interface IProduct {
   image?: string;
   image2?: string;
   description?: string;
+  stock?: number;
 }
 
 interface CarouselProps {
@@ -122,34 +123,40 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               </p>
             )}
 
-            <div className=" flex justify-between gap-4">
-              <div className=" grow">
-                <Button
-                  title="Buy Now"
-                  className=" w-full"
-                  paddingMargin="px-auto"
+            {product?.stock === 0 ? (
+              <div className=" flex ">
+                <Button title="Out Of Stock" variant='out-lined' disabled={true} />
+              </div>
+            ) : (
+              <div className=" flex justify-between gap-4">
+                <div className=" grow">
+                  <Button
+                    title="Buy Now"
+                    className=" w-full"
+                    paddingMargin="px-auto"
+                    onClick={(e: any) => {
+                      e?.stopPropagation();
+                      handleButtonClick(true);
+                    }}
+                  />
+                </div>
+                <div
                   onClick={(e: any) => {
                     e?.stopPropagation();
-                    handleButtonClick(true);
+                    handleButtonClick(false);
                   }}
-                />
-              </div>
-              <div
-                onClick={(e: any) => {
-                  e?.stopPropagation();
-                  handleButtonClick(false);
-                }}
-                className=" cursor-pointer flex justify-center items-center px-2 relative"
-              >
-                <ShoppingCartIcon
-                  className="h-8 w-8 text-app-teal"
-                  aria-hidden="true"
-                />
-                <div className=" absolute z-10 top-0 right-0">
-                  <PlusCircleIcon className=" h-5 w-5 text-app-teal" />
+                  className=" cursor-pointer flex justify-center items-center px-2 relative"
+                >
+                  <ShoppingCartIcon
+                    className="h-8 w-8 text-app-teal"
+                    aria-hidden="true"
+                  />
+                  <div className=" absolute z-10 top-0 right-0">
+                    <PlusCircleIcon className=" h-5 w-5 text-app-teal" />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -166,7 +173,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
           <div className=" flex sm:flex-row flex-col gap-4 sm:gap-8">
             <div className=" shrink-0">
               <img
-                onClick={()=> setFullSize(true)}
+                onClick={() => setFullSize(true)}
                 src={selectedIndex === 1 ? product?.image2 : product?.image}
                 alt="img"
                 className=" max-w-[16rem] aspect-[1050/1600] object-cover cursor-pointer"
@@ -204,7 +211,11 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                 {product?.description}
               </div>
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
-                {Array.isArray(product?.variants) &&
+                {product?.stock === 0 ? (
+                  <div className=" flex ">
+                    <Button title="Out Of Stock" variant='out-lined' disabled={true} />
+                  </div>
+                ) : Array.isArray(product?.variants) ? (
                   product.variants.map((variant, ind) => (
                     <Button
                       onClick={() => handelVariantClick([variant])}
@@ -215,7 +226,10 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                     >
                       <PlusCircleIcon className=" h-6 w-6" />
                     </Button>
-                  ))}
+                  ))
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

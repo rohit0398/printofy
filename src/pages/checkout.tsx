@@ -43,6 +43,7 @@ export default function Checkout() {
     type: string;
     price: number;
     date: string;
+    freeShiping?: boolean;
   }>();
   const { push } = useRouter();
   const { register, handleSubmit, formState, control, watch, setValue } =
@@ -71,7 +72,9 @@ export default function Checkout() {
       0
     );
 
-    if (deliveryDetails?.price) total = total + deliveryDetails?.price;
+    if (deliveryDetails?.price && total < 200)
+      total = total + deliveryDetails?.price;
+
     if (coupon?.title && (coupon?.minPrice < total || !coupon?.minPrice)) {
       if (coupon?.type === "flat" && coupon?.discount)
         return floor(total - coupon.discount ?? 0);
@@ -89,12 +92,15 @@ export default function Checkout() {
       return toast.error("Please add products to cart");
 
     raw.type = (raw?.type?.value as any) ?? "";
+    const delivery = deliveryDetails;
+    if (delivery && grandTotal - delivery.price > 199)
+      delivery.freeShiping = true;
     setLoading(true);
     api
       .post(`/order`, {
         ...raw,
         total: grandTotal,
-        delivery: deliveryDetails,
+        delivery,
         products: cartState.map((val) => {
           return {
             _id: val?._id,
@@ -114,12 +120,18 @@ export default function Checkout() {
   }
 
   function handleCountChange(bool: boolean, ind: number, count?: number) {
-    if (bool)
+    if (bool) {
+      if (!count) count = 1;
+      const stock = cartState[ind].stock;
+      if (stock && count && count >= stock)
+        return toast.error(`Only ${stock} products are avaialbe in stock!`);
+      else if (count && count > 9)
+        return toast.error("Only 10 products are allowed per order!");
       cartDispatch({
         type: "COUNT_CHANGE",
-        payload: { ind, count: count ? count + 1 : 2 },
+        payload: { ind, count: count + 1 },
       });
-    else
+    } else
       cartDispatch({
         type: "COUNT_CHANGE",
         payload: { ind, count: count ? count - 1 : 0 },
@@ -225,7 +237,7 @@ export default function Checkout() {
                 <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Order Number:</div>
                   <div className=" font-bold text-lg break-all">
-                    {orderDetails?._id}
+                    {orderDetails?.shortId}
                   </div>
                 </div>
                 <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
@@ -265,7 +277,7 @@ export default function Checkout() {
                 </div>
                 <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
                   <span className=" font-bold text-lg">Message: </span>
-                  {orderDetails?._id}
+                  {orderDetails?.shortId}
                 </div>
 
                 <div className=" my-6">
@@ -418,13 +430,22 @@ export default function Checkout() {
                         <></>
                       )}
                       <div>
-                        {deliveryDetails?.price && (
-                          <div className=" flex justify-between">
-                            <span className=" text-xs opacity-70">
-                              Delivery Charges
-                            </span>
-                            <span>${deliveryDetails?.price}</span>
-                          </div>
+                        {deliveryDetails?.price ? (
+                          grandTotal - deliveryDetails.price < 200 ? (
+                            <div className=" flex justify-between">
+                              <span className=" text-xs opacity-70">
+                                Delivery Charges
+                              </span>
+                              <span>${deliveryDetails?.price}</span>
+                            </div>
+                          ) : (
+                            <div className=" flex justify-between">
+                              <span></span>
+                              <span className=" text-xs">Free delivery</span>
+                            </div>
+                          )
+                        ) : (
+                          <></>
                         )}
                         <div className=" flex justify-between">
                           <span className=" font-aboreto">Grand Total</span>

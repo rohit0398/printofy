@@ -15,6 +15,7 @@ export interface IProduct {
   variants?: { u: string; p: number }[];
   count?: number;
   image?: string;
+  stock?: number;
 }
 
 interface CarouselProps {
