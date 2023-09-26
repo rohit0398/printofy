@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { floor } from "lodash";
+import { find, floor } from "lodash";
 
 interface FormData {
   name: string;
@@ -35,6 +35,8 @@ export default function Checkout() {
   const [addAddress, setAddAddress] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>({});
+  const [eTransfer, setETransfer] = useState<any>();
+  const [cryptoTransfer, setCryptoTransfer] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [coupon, setCoupon] = useState<{ [key: string]: any }>();
   const [couponName, setCouponName] = useState("");
@@ -112,6 +114,15 @@ export default function Checkout() {
       .then((res) => {
         setOrderCreated(true);
         setOrderDetails(res?.data);
+        const eTrans = res?.data?.transfer
+          ? find(res.data.transfer, (val) => val?.type === "e-transfer")
+          : undefined;
+        const cryptoTrans = res?.data?.transfer
+          ? find(res.data.transfer, (val) => val?.type === "crypto")
+          : undefined;
+        setETransfer(eTrans);
+        setCryptoTransfer(cryptoTrans);
+
         toast.success("Order created successfully");
         cartDispatch({ type: "RESET" });
       })
@@ -229,6 +240,102 @@ export default function Checkout() {
         </div>
         {orderCreated ? (
           <div className=" grid grid-cols-1 md:grid-cols-2 gap-8 mx-2">
+            {cryptoTransfer ? (
+              <div className=" md:p-4 px-2 py-4 border border-white/40 rounded-lg bg-gray-900">
+                <div className="font-semibold md:text-xl text-lg mb-10">
+                  CRYPTO INSTRUCTIONS
+                </div>
+                <div className=" flex flex-col gap-2">
+                  <div>
+                    Ensure to put your{" "}
+                    <span className=" font-bold text-lg">{`ORDER NUMBER`}</span>{" "}
+                    in the message box
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Wallet: </span>
+                    {cryptoTransfer.name}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Email: </span>
+                    {cryptoTransfer.email}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Order total: </span>$
+                    {orderDetails?.total}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Message: </span>
+                    {orderDetails?.shortId}
+                  </div>
+
+                  <div className=" my-6">
+                    Auto-deposit is enabled, please ensure your order is correct
+                    before sending crypto-transfer
+                  </div>
+
+                  <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col ">
+                    {cryptoTransfer?.description}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {eTransfer ? (
+              <div className=" md:p-4 px-2 py-4 border border-white/40 rounded-lg bg-gray-900">
+                <div className="font-semibold md:text-xl text-lg mb-10">
+                  E-TRANSFER INSTRUCTIONS
+                </div>
+                <div className=" flex flex-col gap-2">
+                  <div>
+                    Ensure to put your{" "}
+                    <span className=" font-bold text-lg">{`NAME & ORDER NUMBER`}</span>{" "}
+                    in the message box
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Name: </span>
+                    {eTransfer?.name}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Email: </span>
+                    {eTransfer?.email}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Order total: </span>$
+                    {orderDetails?.total}
+                  </div>
+                  <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                    <span className=" font-bold text-lg">Message: </span>
+                    {orderDetails?.shortId}
+                  </div>
+
+                  <div className=" my-6">
+                    Auto-deposit is enabled, please ensure your order is correct
+                    before sending e-transfer
+                  </div>
+
+                  <div className=" font-bold text-lg">
+                    In case there is a security question use this
+                  </div>
+                  <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col ">
+                    <span className=" font-bold text-lg">Question: </span>
+                    {eTransfer?.question}
+                  </div>
+                  <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col">
+                    <span className=" font-bold text-lg">Password: </span>
+                    {eTransfer?.password}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            <div className=" mt-10 flex justify-center">
+              <Button onClick={() => push("/#shop")} title="Go To Shop" />
+            </div>
+
             <div className=" md:p-4 px-2 py-4 border border-white/40 rounded-lg bg-gray-900">
               <div className="font-semibold md:text-xl text-lg mb-10">
                 Order Summary
@@ -249,52 +356,6 @@ export default function Checkout() {
                 <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Payment Method:</div>
                   <div className=" font-bold text-lg">e-Transfer(Interac)</div>
-                </div>
-              </div>
-            </div>
-
-            <div className=" md:p-4 px-2 py-4 border border-white/40 rounded-lg bg-gray-900">
-              <div className="font-semibold md:text-xl text-lg mb-10">
-                E-TRANSFER INSTRUCTIONS
-              </div>
-              <div className=" flex flex-col gap-2">
-                <div>
-                  Ensure to put your{" "}
-                  <span className=" font-bold text-lg">{`NAME & ORDER NUMBER`}</span>{" "}
-                  in the message box
-                </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
-                  <span className=" font-bold text-lg">Name: </span>
-                  {orderDetails?.eTransfer?.name}
-                </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
-                  <span className=" font-bold text-lg">Email: </span>
-                  {orderDetails?.eTransfer?.email}
-                </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
-                  <span className=" font-bold text-lg">Order total: </span>$
-                  {orderDetails?.total}
-                </div>
-                <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
-                  <span className=" font-bold text-lg">Message: </span>
-                  {orderDetails?.shortId}
-                </div>
-
-                <div className=" my-6">
-                  Auto-deposit is enabled, please ensure your order is correct
-                  before sending e-transfer
-                </div>
-
-                <div className=" font-bold text-lg">
-                  In case there is a security question use this
-                </div>
-                <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col ">
-                  <span className=" font-bold text-lg">Question: </span>
-                  {orderDetails?.eTransfer?.question}
-                </div>
-                <div className=" flex sm:items-center gap-1.5 sm:flex-row flex-col">
-                  <span className=" font-bold text-lg">Password: </span>
-                  {orderDetails?.eTransfer?.password}
                 </div>
               </div>
             </div>
@@ -485,11 +546,6 @@ export default function Checkout() {
           </div>
         )}
 
-        {orderCreated && (
-          <div className=" mt-10 flex justify-center">
-            <Button onClick={() => push("/#shop")} title="Go To Shop" />
-          </div>
-        )}
         <Modal open={addAddress} setOpen={(bool) => setAddAddress(bool)}>
           <form
             onSubmit={handleSubmit(onSubmit)}
