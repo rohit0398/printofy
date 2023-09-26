@@ -310,6 +310,15 @@ export default function Checkout() {
                     {orderDetails?.shortId}
                   </div>
 
+                  {eTransfer?.max && (
+                    <div className=" sm:flex-row flex-col flex sm:items-center gap-1.5">
+                      <span className=" font-bold text-lg">
+                        Max transfer limit:{" "}
+                      </span>
+                      {eTransfer?.max}
+                    </div>
+                  )}
+
                   <div className=" my-6">
                     Auto-deposit is enabled, please ensure your order is correct
                     before sending e-transfer
@@ -353,10 +362,10 @@ export default function Checkout() {
                     ${orderDetails?.total}
                   </div>
                 </div>
-                <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
+                {/* <div className=" flex sm:items-center gap-1.5 justify-between sm:flex-row flex-col">
                   <div>Payment Method:</div>
                   <div className=" font-bold text-lg">e-Transfer(Interac)</div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
