@@ -9,6 +9,7 @@ import { Modal } from "./modal";
 import { useCart } from "@/context/cartContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { get } from "lodash";
 
 export interface IProduct {
   _id?: number;
@@ -107,17 +108,19 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
             </p>
             {product.variants && (
               <p className="text-white font-bold text-lg mb-2 leading-none">
-                {product.variants.length === 1 ? (
+                {product.variants.length !== 1 &&
+                product.variants[0].p !==
+                  product.variants[product.variants.length - 1].p ? (
+                  <span>
+                    ${product.variants[0].p} - $
+                    {product.variants[product.variants.length - 1].p}
+                  </span>
+                ) : (
                   <span>
                     ${product.variants[0]?.p ?? ""}{" "}
                     {product.variants[0]?.u
                       ? ` /${product.variants[0]?.u}`
                       : ""}
-                  </span>
-                ) : (
-                  <span>
-                    ${product.variants[0].p} - $
-                    {product.variants[product.variants.length - 1].p}
                   </span>
                 )}
               </p>
@@ -125,7 +128,11 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
 
             {product?.stock === 0 ? (
               <div className=" flex ">
-                <Button title="Out Of Stock" variant='out-lined' disabled={true} />
+                <Button
+                  title="Out Of Stock"
+                  variant="out-lined"
+                  disabled={true}
+                />
               </div>
             ) : (
               <div className=" flex justify-between gap-4">
@@ -213,7 +220,11 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
                 {product?.stock === 0 ? (
                   <div className=" flex ">
-                    <Button title="Out Of Stock" variant='out-lined' disabled={true} />
+                    <Button
+                      title="Out Of Stock"
+                      variant="out-lined"
+                      disabled={true}
+                    />
                   </div>
                 ) : Array.isArray(product?.variants) ? (
                   product.variants.map((variant, ind) => (
