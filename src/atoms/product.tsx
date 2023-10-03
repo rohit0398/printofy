@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button } from "./button";
 import {
   ShoppingCartIcon,
@@ -9,17 +9,16 @@ import { Modal } from "./modal";
 import { useCart } from "@/context/cartContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { get } from "lodash";
+import { findIndex } from "lodash";
 
 export interface IProduct {
   _id?: number;
   label: string;
-  variants?: { u: string; p: number }[];
+  variants?: { u: string; p: number; s?: number }[];
   count?: number;
   image?: string;
   image2?: string;
   description?: string;
-  stock?: number;
 }
 
 interface CarouselProps {
@@ -35,6 +34,14 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
   const [mouseEnter, setMouseEnter] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showFullSize, setFullSize] = useState(false);
+
+  const inStock = useMemo(() => {
+    if (Array.isArray(product.variants)) {
+      const stock = findIndex(product.variants, (o) => o?.s !== 0);
+      if (stock > -1) return true;
+    }
+    return false;
+  }, [product]);
 
   function handleCardClick() {
     console.log("card clicked");
@@ -126,44 +133,39 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               </p>
             )}
 
-            {product?.stock === 0 ? (
-              <div className=" flex ">
+            <div className=" flex justify-between gap-4">
+              <div className=" grow">
                 <Button
-                  title="Out Of Stock"
-                  variant="out-lined"
-                  disabled={true}
-                />
-              </div>
-            ) : (
-              <div className=" flex justify-between gap-4">
-                <div className=" grow">
-                  <Button
-                    title="Buy Now"
-                    className=" w-full"
-                    paddingMargin="px-auto"
-                    onClick={(e: any) => {
-                      e?.stopPropagation();
-                      handleButtonClick(true);
-                    }}
-                  />
-                </div>
-                <div
+                  title={inStock ? "Buy Now" : "Out of stock"}
+                  disabled={!inStock}
+                  className=" w-full"
+                  paddingMargin="px-auto"
                   onClick={(e: any) => {
                     e?.stopPropagation();
-                    handleButtonClick(false);
+                    handleButtonClick(true);
                   }}
-                  className=" cursor-pointer flex justify-center items-center px-2 relative"
-                >
-                  <ShoppingCartIcon
-                    className="h-8 w-8 text-app-teal"
-                    aria-hidden="true"
-                  />
-                  <div className=" absolute z-10 top-0 right-0">
-                    <PlusCircleIcon className=" h-5 w-5 text-app-teal" />
-                  </div>
+                />
+              </div>
+              <div
+                onClick={(e: any) => {
+                  if (inStock) {
+                    e?.stopPropagation();
+                    handleButtonClick(false);
+                  }
+                }}
+                className={` ${
+                  inStock ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+                } flex justify-center items-center px-2 relative`}
+              >
+                <ShoppingCartIcon
+                  className="h-8 w-8 text-app-teal"
+                  aria-hidden="true"
+                />
+                <div className=" absolute z-10 top-0 right-0">
+                  <PlusCircleIcon className=" h-5 w-5 text-app-teal" />
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -218,25 +220,22 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                 {product?.description}
               </div>
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
-                {product?.stock === 0 ? (
-                  <div className=" flex ">
-                    <Button
-                      title="Out Of Stock"
-                      variant="out-lined"
-                      disabled={true}
-                    />
-                  </div>
-                ) : Array.isArray(product?.variants) ? (
+                {Array.isArray(product?.variants) ? (
                   product.variants.map((variant, ind) => (
-                    <Button
-                      onClick={() => handelVariantClick([variant])}
-                      title={`$${variant?.p} /${variant?.u}`}
-                      paddingMargin="px-2 lg:px-4"
-                      className=" flex items-center gap-2 justify-center sm:justify-start"
-                      key={ind}
-                    >
-                      <PlusCircleIcon className=" h-6 w-6" />
-                    </Button>
+                    <div>
+                      {" "}
+                      <Button
+                        disabled={variant?.s === 0}
+                        onClick={() => handelVariantClick([variant])}
+                        title={`$${variant?.p} /${variant?.u}`}
+                        paddingMargin="px-2 lg:px-4"
+                        className=" flex items-center gap-2 justify-center sm:justify-start"
+                        key={ind}
+                      >
+                        <PlusCircleIcon className=" h-6 w-6" />
+                      </Button>
+                      {variant?.s === 0 && <div className=" opacity-50">Out of stock</div>}
+                    </div>
                   ))
                 ) : (
                   <></>

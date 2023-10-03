@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { find, floor } from "lodash";
+import { find, floor, get } from "lodash";
 
 interface FormData {
   name: string;
@@ -133,7 +133,7 @@ export default function Checkout() {
   function handleCountChange(bool: boolean, ind: number, count?: number) {
     if (bool) {
       if (!count) count = 1;
-      const stock = cartState[ind].stock;
+      const stock = get(cartState[ind].variants, `[0].s`);
       if (stock && count && count >= stock)
         return toast.error(`Only ${stock} products are avaialbe in stock!`);
       else if (count && count > 9)

@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useReducer,
 } from "react";
-import { toast } from "react-toastify";
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: IProduct }

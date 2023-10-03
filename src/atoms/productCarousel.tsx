@@ -12,7 +12,7 @@ import { Modal } from "./modal";
 export interface IProduct {
   _id?: number;
   label: string;
-  variants?: { u: string; p: number }[];
+  variants?: { u: string; p: number; s?: number }[];
   count?: number;
   image?: string;
   stock?: number;
