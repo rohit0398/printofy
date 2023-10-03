@@ -222,7 +222,7 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
               <div className="flex md:flex-row flex-col gap-2 flex-wrap text-white">
                 {Array.isArray(product?.variants) ? (
                   product.variants.map((variant, ind) => (
-                    <div>
+                    <div key={ind}>
                       {" "}
                       <Button
                         disabled={variant?.s === 0}
@@ -230,11 +230,12 @@ export const Product: React.FC<CarouselProps> = ({ product }) => {
                         title={`$${variant?.p} /${variant?.u}`}
                         paddingMargin="px-2 lg:px-4"
                         className=" flex items-center gap-2 justify-center sm:justify-start"
-                        key={ind}
                       >
                         <PlusCircleIcon className=" h-6 w-6" />
                       </Button>
-                      {variant?.s === 0 && <div className=" opacity-50">Out of stock</div>}
+                      {variant?.s === 0 && (
+                        <div className=" opacity-50">Out of stock</div>
+                      )}
                     </div>
                   ))
                 ) : (
