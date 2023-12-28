@@ -7,6 +7,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import api from "@/util/api";
 import { wentWrong } from "@/util/helper";
+import {
+  AnimateContainer,
+  AnimateSlideContainer,
+} from "@/molecules/animateContainer";
+import { SocialLinks } from "@/atoms/socialLinks";
 
 type FormData = {
   firstname: String;
@@ -82,45 +87,49 @@ export default function Home() {
               autoPlay
               muted
               loop
-              className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover"
+              className="absolute top-0 left-0 md:left-[20%] -z-20 w-full h-[calc(100vh-4rem)] object-cover opacity-30 md:rounded-full overflow-hidden"
             >
-              <source src="/assets/shroom-video4.mp4" type="video/mp4" />
+              <source src="/assets/video-print.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-            <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
+            {/* <div className=" flex justify-center items-center circular-gradient top-0 left-0 right-0 md:left-[20%] md:right-[-20%] absolute -z-10 h-[calc(100vh-4rem)]">
               <img
                 src="assets/shroom-logo.png"
                 className=" max-w-[14rem] md:max-w-[24rem] w-fit object-cover transition duration-500"
                 alt="imgage"
               />
-            </div>
+            </div> */}
 
             <div className=" flex flex-col gap-5 justify-start text-center pb-6 md:text-left md:justify-center md:pb-0 w-full h-full relative">
               <div className=" px-2 md:px-4 mt-[10%] md:-mt-20">
-                <div className=" hidden md:inline-block mb-4">
-                  <img
-                    src="/assets/what-is-mushroom.png"
-                    className="max-w-[6rem] w-fit object-cover "
-                    alt="imgage"
-                  />
-                </div>
-                <div className=" md:text-3xl text-2xl text-white font-medium">
-                  Welcome To
-                </div>
-                <div className=" md:text-5xl text-4xl text-app-teal font-semibold my-2 md:my-4">
-                  SHROOM CITY
-                </div>
-                <div className=" md:text-3xl text-2xl text-white font-medium leading-tight">
-                  Where The Magic Happens
-                </div>
+                <AnimateSlideContainer>
+                  <div className=" hidden md:inline-block mb-4">
+                    <img
+                      src="/assets/logo.png"
+                      className=" w-60 object-cover"
+                      alt="imgage"
+                    />
+                  </div>
+                </AnimateSlideContainer>
+                <AnimateContainer width="w-full">
+                  <div className=" md:text-3xl text-2xl text-white font-medium">
+                    Welcome To
+                  </div>
+                  <div className=" md:text-5xl text-4xl text-app-teal font-semibold my-2 md:my-4">
+                    PRINTOFY 3D
+                  </div>
+                  <div className=" md:text-3xl text-2xl text-white font-medium leading-tight">
+                    WAY TO SHAPE YOUR IDEA
+                  </div>
+                </AnimateContainer>
               </div>
-              <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
+              {/* <div className="px-2 md:px-4 mt-auto mb-16 md:mt-4 md:mb-0 ">
                 <Button
                   onClick={() => push("/products")}
                   title="Shop Online"
                   className=""
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -131,35 +140,36 @@ export default function Home() {
             <div className=" absolute left-0 right-0 md:top-[10%] top-0 bottom-0 -z-10 bg-app-dark-gray"></div>
             <div className=" md:border-l-2 md:border-white border-none md:pl-8 pl-0">
               <div className=" text-gradient text-4xl mb-6 font-aboreto font-bold">
-                WHAT IS SHROOM CITY?
+                WHAT Printofy3D?
               </div>
               <div className=" text-lg">
-                Welcome to Shroom City, your ultimate destination for
-                psychedelic mushrooms! We are thrilled to introduce you to our
-                unique selection of high-quality mushrooms that will take you on
-                a mind-bending journey like no other. Allow us to share with you
-                why Shroom City is the go-to store for your psychedelic
-                exploration.
+                We are providing 3D Printing service, 3D Printing Lab Setup,
+                Filaments with a vision of helping the industries and students
+                to grow with the innovative ideas and reduce their new products
+                development time in India at very reasonable prices. Special
+                discounts for the students. Printers available 1) Prusa (MK3S)
+                (250*210*210) 2) Creality ender 3 s1 (220*220*270) 3) Divide by
+                zero -Alpha 500 (500*500*500 mm)/(19.7"*19."7*19.7")
               </div>
             </div>
-            <div className=" flex justify-center md:order-last order-first">
+            <div className=" flex justify-center items-center md:order-last order-first">
               <img
-                src="/assets/what-is-mushroom.png"
+                src="/assets/what-is-printofy.jpg"
                 alt="image"
-                className=" w-[50%] md:w-auto"
+                className=" max-w-full md:max-w-[80%] object-cover rounded-3xl"
               />
             </div>
           </div>
 
           <div className=" text-center text-gradient text-4xl md:mt-16 mt-20 w-fit mx-auto font-aboreto font-bold">
-            WHY SHROOM CITY?
+            Why Printofy3D?
           </div>
           <div className=" w-full h-fit mt-2 md:mt-0 py-5 md:py-10 px-4 md:px-10 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className=" flex justify-center order-last md:order-first">
+            <div className=" flex justify-center items-center order-last md:order-first">
               <img
-                src="/assets/whyshroomcity.png"
+                src="/assets/why-printofy.jpg"
                 alt="image"
-                className=" max-h-[50vh] md:max-h-[70vh]"
+                className=" max-w-full md:max-w-[80%] object-cover rounded-3xl"
               />
             </div>
             <div className="pr-4">
@@ -167,29 +177,22 @@ export default function Home() {
                 1. Exceptional Quality
               </div>
               <div className=" text-lg">
-                At Shroom City, we are dedicated to providing you with mushrooms
-                of unparalleled quality. Our team of experts carefully curates
-                each strain, ensuring that only the finest mushrooms make it to
-                our shelves. We believe that by offering top-notch products, we
-                can enhance your psychedelic experience and help you unlock new
-                dimensions of consciousness.
+                At Printofy3D, we are dedicated to providing you with
+                unparalleled quality. Our team of experts help you to serve your
+                application by selecting the materials and machines after
+                understanding your requirements and application.
               </div>
 
               <div className=" text-app-teal text-xl mb-3 mt-10">
                 2. Extensive Variety
               </div>
               <div className=" text-lg">
-                {`As residents of Shroom City, we take pride in our vast selection
-                of mushroom strains. From classic varieties to rare and exotic
-                species, our store offers a diverse range to suit every
-                individual's preferences. Whether you're seeking a profound
-                spiritual journey or a joyous and creative exploration, Shroom
-                City has the perfect mushroom for you.`}
+                {`With the experience of more than 8 years in industry, we offer extensive variety of materials from PLA, ABS to some special engineering and application based materials with a blend of various technologies used in 3D printing.`}
               </div>
             </div>
           </div>
 
-          <div className=" w-full h-fit md:py-10 pt-10 mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
+          {/* <div className=" w-full h-fit md:py-10 pt-10 mt-0 justify-center items-center grid grid-cols-1 md:grid-cols-2 gap-4 px-4 md:px-10">
             <div className=" md:border-l-2 md:border-white md:pl-8">
               <div className=" text-app-teal text-xl mb-3">
                 3. Rigorous Safety Standards
@@ -248,7 +251,7 @@ export default function Home() {
                 destination for frictional psychedelic mushrooms.`}
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Visit Store section */}
 
@@ -261,9 +264,9 @@ export default function Home() {
                 VISIT OUR STORE
               </div>
               <div className=" text-lg">
-                SHROOM CITY - TORONTO
+                Printofy3D - Ludhiana
                 <br />
-                <span>Meet The Best Shroom In The City</span>
+                <span>Meet The Best 3D Printing In The City</span>
                 <br />
                 <span className=" font-bold mt-6 text-app-teal">
                   Working hours:
@@ -273,18 +276,19 @@ export default function Home() {
                 <br />
                 <span className=" font-bold mt-6 text-app-teal"> Address:</span>
                 <br />
-                188 Spadina Ave, Toronto, ON M5T 3A4, Canada
+                1201/1, bhagwan chowk, Janta Nagar, Ludhiana, Punjab 141003
               </div>
             </div>
             <div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.9198164089735!2d-79.39970142374685!3d43.64983657110227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34db585c2261%3A0x669ee841e0f81137!2s188%20Spadina%20Ave.%2C%20Toronto%2C%20ON%20M5T%203A4%2C%20Canada!5e0!3m2!1sen!2sin!4v1694168994188!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3424.190355450908!2d75.86310561157725!3d30.881335474406672!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391a835dfa8e36a9%3A0x202940cc81d48440!2sPrintofy_3d!5e0!3m2!1sen!2sin!4v1703783975671!5m2!1sen!2sin"
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                className=" rounded-3xl"
               ></iframe>
             </div>
           </div>
@@ -356,13 +360,14 @@ export default function Home() {
                 <div>
                   <Button
                     type="submit"
-                    title="Submit"
+                    title="Send Queries"
                     className=" mt-6"
                     disabled={loading}
                   />
                 </div>
               </form>
             </div>
+
             <div className=" flex flex-col h-fit md:h-96 gap-4 justify-end">
               <div className=" flex gap-4 md:self-end">
                 <img
@@ -374,7 +379,7 @@ export default function Home() {
                   }
                   src="/assets/instagram.png"
                   alt="image"
-                  className=" w-10 h-10 cursor-pointer"
+                  className=" w-6 h-6 cursor-pointer"
                 />
                 <img
                   onClick={() =>
@@ -385,11 +390,14 @@ export default function Home() {
                   }
                   src="/assets/tiktok.png"
                   alt="image"
-                  className=" w-10 h-10 cursor-pointer"
+                  className=" w-6 h-6 cursor-pointer"
                 />
               </div>
+              <div className=" flex gap-4 md:self-end">
+                <SocialLinks />
+              </div>
               <div className=" text-base font-semibold md:self-end">
-                2023 Copyright Shroomcity.xyz | All reserved copyright
+                2023 Copyright Printofy3d | All reserved copyright
               </div>
             </div>
           </div>
@@ -397,7 +405,7 @@ export default function Home() {
       </div>
 
       {/* Age confirmation section */}
-      {ageConfirmation && (
+      {/* {ageConfirmation && (
         <div className=" fixed inset-0 z-50 flex flex-col justify-center items-center bg-black/80">
           <div className=" text-4xl font-aboreto mb-10 text-center">
             Please verify your age to enter.
@@ -415,7 +423,7 @@ export default function Home() {
             />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

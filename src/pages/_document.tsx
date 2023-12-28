@@ -4,11 +4,11 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="Shroom City" content={"Shroom City"} />
-        <title>Shroom City - Where The Magic Happens</title>
+        <meta name="Printofy3D" content={"Printofy3D"} />
+        <title>Meet The Best 3D Printing In The Ludhiana City</title>
         <meta
           name="description"
-          content="Welcome to Shroom City, your ultimate destination for psychedelic mushrooms!"
+          content={`We are providing 3D Printing service, 3D Printing Lab Setup, Filaments with a vision of helping the industries and students to grow with the innovative ideas and reduce their new products development time in India at very reasonable prices. Special discounts for the students. Printers available 1) Prusa (MK3S) (250*210*210) 2) Creality ender 3 s1 (220*220*270) 3) Divide by zero -Alpha 500 (500*500*500 mm)/(19.7"*19."7*19.7")`}
         />
 
         <link

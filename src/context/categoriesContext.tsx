@@ -25,7 +25,10 @@ const CartContext = createContext<{
   categoriesDispatch: React.Dispatch<CartAction>;
 } | null>(null);
 
-const categoriesReducer = (state: CategoriesState, action: CartAction): CategoriesState => {
+const categoriesReducer = (
+  state: CategoriesState,
+  action: CartAction
+): CategoriesState => {
   switch (action.type) {
     case "LOAD_CATEGORIES":
       return action.payload;
@@ -42,14 +45,14 @@ export const CategoriesProvider: React.FC<{ children: ReactNode }> = ({
   const [categories, categoriesDispatch] = useReducer(categoriesReducer, []);
 
   useEffect(() => {
-    api
-      .get(`/category?status=true`)
-      .then((res) => {
-        categoriesDispatch({ type: "LOAD_CATEGORIES", payload: res?.data }); // Clear the cart
-      })
-      .catch(() =>
-        toast.error("Unable to load categories, Please refresh page!")
-      );
+    // api
+    //   .get(`/category?status=true`)
+    //   .then((res) => {
+    //     categoriesDispatch({ type: "LOAD_CATEGORIES", payload: res?.data }); // Clear the cart
+    //   })
+    //   .catch(() =>
+    //     toast.error("Unable to load categories, Please refresh page!")
+    //   );
   }, []);
 
   return (

@@ -9,13 +9,13 @@ import { useRouter } from "next/router";
 import { useCart } from "@/context/cartContext";
 import { toast } from "react-toastify";
 import { DropDown } from "@/atoms/dropdown";
-import { useCategories } from "@/context/categoriesContext";
+import { AnimateButtonContainer } from "./animateContainer";
 
-const navigation = [
-  { name: "Categories", href: "/#categories" },
-  { name: "About Us", href: "/#about-us" },
-  { name: "Shop Location", href: "/#shop-location" },
-  { name: "Contact Us", href: "/#contact-us" },
+const navigation: any[] = [
+  // { name: "Categories", href: "/#categories" },
+  // { name: "About Us", href: "/#about-us" },
+  // { name: "Shop Location", href: "/#shop-location" },
+  // { name: "Contact Us", href: "/#contact-us" },
 ];
 
 function classNames(...classes: any) {
@@ -25,7 +25,6 @@ function classNames(...classes: any) {
 export function Header() {
   const { push, query } = useRouter();
   const { cartState } = useCart();
-  const { categories } = useCategories();
   const [scrolled, setScrolled] = useState(false);
   const [selected, setSelected] = useState("");
 
@@ -77,7 +76,7 @@ export function Header() {
                   className="flex flex-shrink-0 items-center cursor-pointer"
                 >
                   <img
-                    className="h-8 w-auto"
+                    className="h-20 w-auto"
                     src="assets/logo.png"
                     alt="Your Company"
                   />
@@ -85,54 +84,19 @@ export function Header() {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                  {navigation.map((item) => {
-                    return item.name === "Categories" ? (
-                      <DropDown
-                        title="Categories"
-                        data={categories}
-                        handleClick={(val) => push(`/products?categoryId=${val?._id}`)}
-                      />
-                    ) : (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setSelected(item.href)}
-                        className={classNames(
-                          selected === item.href
-                            ? "bg-app-purple text-white"
-                            : "text-gray-300 hover:bg-app-purple hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium uppercase"
-                        )}
-                        aria-current={selected ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    );
-                  })}
+                  
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  onClick={() =>
-                    cartState?.length
-                      ? push("/checkout")
-                      : toast.info("Add Product to cart")
-                  }
-                  type="button"
-                  className="relative rounded-full bg-gray-800 p-3 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">cart</span>
-                  <ShoppingCartIcon
-                    className="h-6 w-6 text-app-teal"
-                    aria-hidden="true"
-                  />
-                  {cartState?.length > 0 && (
-                    <div className=" absolute z-10 top-0 right-0 rounded-full text-app-teal font-bold">
-                      {cartState?.length}
-                    </div>
-                  )}
-                </button>
+                <AnimateButtonContainer>
+                  <button
+                    onClick={() => push("/#contact-us")}
+                    type="button"
+                    className="relative rounded-md bg-gray-800 px-3 py-1 text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  >
+                    Contact Us
+                  </button>
+                </AnimateButtonContainer>
               </div>
             </div>
           </div>
