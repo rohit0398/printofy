@@ -6,7 +6,8 @@
     "dev": "node app.js",
     "build": "next build",
     "start": "node app.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js --fix"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
